@@ -56,7 +56,6 @@ class RegisterView(View):
             user_name = request.POST.get("email", "")
             pass_word = request.POST.get("password","")
 
-
             if UserProfile.objects.filter(email=user_name):
                 return render(request, "register.html", {"register_form": register_form, "msg": "用户名已经存在"})
 
@@ -68,7 +67,7 @@ class RegisterView(View):
             user_profile.save()
 
             send_register_email(user_name, "register")
-            return render(request, "login.html")
+            return render(request, "register_mail_success.html")
         else:
             return render(request, "register.html", {"register_form":register_form})
 
@@ -76,33 +75,46 @@ class RegisterView(View):
 class ActiveUserView(View):
     def get(self, request, active_code):
         all_record = EmailVerifyRecord.objects.filter(code=active_code)
-        for record in all_record:
-            email = record.email
-            user = UserProfile.objects.get(email=email)
-            user.is_active = True
-            user.save()
+        if all_record:
+            for record in all_record:
+                email = record.email
+                user = UserProfile.objects.get(email=email)
+                user.is_active = True
+                user.save()
+        else:
+            render(request, "active_failure.html")
 
         return render(request, "login.html")
 
 
 class ForgetPwdView(View):
     def get(self, request):
-        forgetPwd_form = ForgetPwdForm()
-        return render(request, "forgetpwd.html", {"forgetPwd_form":forgetPwd_form})
+        forgetpwd_form = ForgetPwdForm()
+        return render(request, "forgetpwd.html", {"forgetPwd_form": forgetpwd_form})
 
     def post(self, request):
-        forgetPwd_form = ForgetPwdForm(request.POST)
-        if forgetPwd_form.is_valid():
+        forgetpwd_form = ForgetPwdForm(request.POST)
+        if forgetpwd_form.is_valid():
             email = request.POST.get("email", "")
             if not (UserProfile.objects.filter(email=email)):
-                return render(request, "forgetpwd.html", {"forgetPwd_form": forgetPwd_form, "msg":"用户邮箱不存在"})
+                return render(request, "forgetpwd.html", {"forgetPwd_form": forgetpwd_form, "msg": "用户邮箱不存在"})
 
             # send a new mail for reset password
 
+            send_register_email(email, "forget")
             return render(request, "send_resetPwd_success.html")
-        return render(request, "forgetpwd.html", {"forgetPwd_form":forgetPwd_form})
+        return render(request, "forgetpwd.html", {"forgetPwd_form": forgetpwd_form})
 
 
+class PasswordResetView(View):
+    def get(self, request, active_code):
+        all_record = EmailVerifyRecord.objects.filter(code=active_code)
+        if all_record:
+            for record in all_record:
+                email = record.email
+            render(request, "password_reset.html", {'email': email})
+        else:
+            render(request, "active_failure.html")
 
 
 def user_logout(request):
