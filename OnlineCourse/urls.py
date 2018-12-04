@@ -4,8 +4,8 @@ from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
 from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, PasswordResetView, ModifyPwdView
+from organization.views import OrgListView
 
-# Uncomment the next two lines to enable the admin:
 
 # xadmin.autodiscover()
 #
@@ -25,6 +25,9 @@ urlpatterns += [
     path('', TemplateView.as_view(template_name="index.html"), name="index"),
 ]
 
+"""
+user url 
+"""
 urlpatterns += [
     path('login/', LoginView.as_view(), name="login"),
     path('register/', RegisterView.as_view(), name="register"),
@@ -33,4 +36,11 @@ urlpatterns += [
     path('password_reset/<active_code>/', PasswordResetView.as_view(), name="password_reset"),
     path('modify_pwd/', ModifyPwdView.as_view(), name="modify_pwd"),
     # path('logout/', user_login, name="logout")
+]
+
+"""
+Organization url
+"""
+urlpatterns += [
+    path('org_list/', OrgListView.as_view(), name="org_list"),
 ]
