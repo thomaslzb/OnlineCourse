@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
+
 class UserProfile(AbstractUser):
     nick_name = models.CharField(max_length=50, verbose_name=u"昵称", default="")
     birday = models.DateField(verbose_name=u"生日", null=True, blank=True)
@@ -22,6 +23,7 @@ class UserProfile(AbstractUser):
     def __str__(self):
         return self.username
 
+
 class EmailVerifyRecord(models.Model):
     code = models.CharField(max_length=20, verbose_name=u"验证码")
     email = models.EmailField(max_length=50, verbose_name=u"邮箱")
@@ -36,6 +38,7 @@ class EmailVerifyRecord(models.Model):
 
     def __str__(self):
         return '{0}({1})'.format(self.code, self.email)
+
 
 class Banner(models.Model):
     title = models.CharField(max_length=100, verbose_name=u"标题")

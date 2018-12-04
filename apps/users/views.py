@@ -9,8 +9,9 @@ from django.views.generic.base import View
 
 
 from .models import UserProfile, EmailVerifyRecord
-from .forms import LoginForm, RegisterForm, ForgetPwdForm
+from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm
 from utils.email_send import send_register_email
+
 
 class CustomBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
@@ -103,7 +104,8 @@ class ForgetPwdView(View):
 
             send_register_email(email, "forget")
             return render(request, "send_resetPwd_success.html")
-        return render(request, "forgetpwd.html", {"forgetPwd_form": forgetpwd_form})
+        else:
+            return render(request, "forgetpwd.html", {"forgetPwd_form": forgetpwd_form})
 
 
 class PasswordResetView(View):
@@ -112,9 +114,29 @@ class PasswordResetView(View):
         if all_record:
             for record in all_record:
                 email = record.email
-            render(request, "password_reset.html", {'email': email})
+            return render(request, "password_reset.html", {'email': email})
         else:
-            render(request, "active_failure.html")
+            return render(request, "active_failure.html")
+
+
+class ModifyPwdView(View):
+    def post(self, request):
+        modifypwdform = ModifyPwdForm(request.POST)
+        email = request.POST.get("email", "")
+        if modifypwdform.is_valid():
+            pass1 = request.POST.get("password1", "")
+            pass2 = request.POST.get("password2", "")
+            if pass1 != pass2:
+                return render(request, "password_reset.html", {"modifypwd_form": modifypwdform,
+                                                               "email": email,"msg": "两次输入的密码不一致"})
+
+            userprofile = UserProfile.objects.get(email=email)
+            if userprofile:
+                userprofile.password = make_password(pass1)
+                userprofile.save()
+                return render(request, "modifypwd_success.html")
+        else:
+            return render(request, "password_reset.html", {"modifypwd_form": modifypwdform, "email": email})
 
 
 def user_logout(request):
