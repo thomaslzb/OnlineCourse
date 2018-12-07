@@ -45,10 +45,13 @@ INSTALLED_APPS = [
     "operation",
     "organization",
 
-    "xadmin",
     "crispy_forms",
-    "captcha",
     "reversion",
+
+    "xadmin",
+    "captcha",
+    "ckeditor",
+    "pure_pagination",
 
 ]
 
@@ -67,7 +70,7 @@ ROOT_URLCONF = "OnlineCourse.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR,  "templates"),],
+        "DIRS": [os.path.join(BASE_DIR,  "templates"), ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -75,6 +78,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.media"
             ],
         },
     },
@@ -131,11 +135,13 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = "users.UserProfile"
 
@@ -143,6 +149,13 @@ AUTHENTICATION_BACKENDS =(
     "users.views.CustomBackend",
 )
 
+
+PAGINATION_SETTINGS = {
+    'PAGE_RANGE_DISPLAYED': 5,
+    'MARGIN_PAGES_DISPLAYED': 2,
+
+    'SHOW_FIRST_PAGE_WHEN_INVALID': True,
+}
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"

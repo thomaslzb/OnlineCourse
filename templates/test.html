@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <title> New Document </title>
+  <meta name="Generator" content="EditPlus">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+ </head>
+ <!-- 第三种的样式 -->
+ <style>
+	* { margin:0; padding:0;}
+	body { text-align:center; font:75% Verdana, Arial, Helvetica, sans-serif;}
+	.classDiv { width:40%; background:#CCC; position:relative; margin:0 auto; padding:5px;}
+	span { position:absolute; right:10px; top:8px; cursor:pointer; color:yellow;}
+	p { text-align:left; line-height:20px;  padding:3px; margin-top:5px; color:#333}
+	#class1content { height:300px;overflow:hidden}
+</style>
+
+		<!-- 第五种 ---需求--  如何实现js展开收起（折叠）效果呢？例如：一段内容过长了，我限制他显示为20个字内，但是超出了20的就先用省略号代替，然后后面添加一个展开，点击展开后就显示所有的内容，这时候展开按钮就变成了 折叠按钮，点击折叠又变成了展开，并且，折叠后又像是20字内了！
+ 实现原理：
+  获取div中的文本内容，然后动态创建一个div和和a对象，如果文章的内容超过指定的字数，那么就会截取指定的 字符串，然后将截取的内容放入创建的div中，a对象中的内容也设置为“...显示全部”，这样就实现了默认状态的收起效果。当点击显示全部后，会将原来 box中的内容全部放到新创建的div中，并且将a对象中的内容设置为"收起"。基本就是这个原理实现的此效果。
+ -->
+<style type="text/css">
+	#box{width:680px;height:200px;}
+</style>
+ <!-- 第一种方法 -->
+
+
+jquery中 a = a || "text"表示如果a为空，那么a就赋值为text。这个表达式常用于过滤变量a的空值，将其赋值为默认字符串。等价于表达式：if(!a)    a = "text";
+
+对于此表达式，注意两点：
+
+    || 是逻辑或，如果前一个表达式为true，就可以直接判定结果为true，从而不再执行后一个表达式；只有当前一个表达式为false时，才执行后一个表达式。
+
+    javascript中，null，0，undefined 都作为false。
+
+
+<script>
+ function openShutManager(obj,divId,shutAble,open,close){
+	var objStr = typeof obj == "string" ? document.getElementById(obj) : obj; //用来进行判断获取的对象是不是string类型的，是string类型的就获取document对象，不是就赋值传递的数据
+	var idStr = typeof divId == "string" ? document.getElementById(divId) : divId;//用来判断要隐藏展示的区域的id是不是string类型的，是string类型的就获取对应的document对象，不是就获取原有的id数据的值。
+	var openTip = open || ""; //jquery中a=a||"text"表示如果a为空，那么a就赋值为text，具体看本博客的：http://blog.csdn.net/wu920604/article/details/53809259
+	var closeTip = close || "";
+	if(idStr.style.display!="none"){  //判断隐藏展示的div的display的值是不是为none，是表示隐藏
+	   if(shutAble) return;  //在判断传递的是true还是false
+	   idStr.style.display="none";  //当展示的时候，display的属性值不为none，点击关闭将属性值赋值为none
+	   if(openTip  &&  closeTip){
+		objStr.innerHTML = closeTip;
+	   }
+	} else {//当display属性值为none时，即隐藏的时候，把block赋值为display的属性值
+	   idStr.style.display="block";
+	   if(openTip  &&  closeTip){
+		objStr.innerHTML = openTip;
+	   }
+	}
+}
+</script>
+<!-- 第二种方法 -->
+<script type="text/javascript">
+<!--
+function openShutManager2(obj) {
+	var objStr = typeof obj == "string" ? document.getElementById(obj) : obj;
+	if(document.getElementById("dataDivId").style.display!="none"){
+		document.all["dataDivId"].style.display="none"; //显示
+		objStr.innerHTML='点击展开2';
+	}else{
+		document.all["dataDivId"].style.display="block"; //隐藏
+		objStr.innerHTML='点击关闭2';
+	}
+}
+//-->
+</script>
+<!-- 第三种方法 -->
+<script type="text/javascript">
+<!--
+	function $(element){
+		return element = document.getElementById(element);
+	}
+	function $D(){
+		var d=$('class1content');
+		var h=d.offsetHeight;
+		var maxh=300;
+	function dmove(){
+		h+=50; //设置层展开的速度23sc.cn
+		if(h>=maxh){
+			d.style.height='300px';
+			clearInterval(iIntervalId);
+		}else{
+			d.style.display='block';
+			d.style.height=h+'px';
+		}
+	}
+	iIntervalId=setInterval(dmove,2);
+}
+	function $D2(){
+		var d=$('class1content');
+		var h=d.offsetHeight;
+		var maxh=300;
+	function dmove(){
+		h-=50;//设置层收缩的速度23sc.cn
+		if(h<=0){
+			d.style.display='none';
+			clearInterval(iIntervalId);
+		}else{
+			d.style.height=h+'px';
+		}
+		}
+		iIntervalId=setInterval(dmove,2);
+		}
+		function $use(){
+			var d=$('class1content');
+			var sb=$('stateBut');
+			if(d.style.display=='none'){
+				$D();
+				sb.innerHTML='收缩';
+			}else{
+				$D2();
+				sb.innerHTML='展开';
+		}
+	}
+//-->
+</script>
+<!-- 第四种方式--类似第三种 -->
+<script type="text/javascript">
+<!--
+	function openOrClose4(){
+		var sta = document.getElementById('popTitle');
+		var mod = document.getElementById('method');
+		if(sta.style.display =='none'){
+			sta.style.display='block';
+			mod.innerText='-';mod.innerHTML='关闭';
+		}else{
+			sta.style.display='none';
+			mod.innerText='+';mod.innerHTML='展示';
+		};
+	}
+//-->
+</script>
+<!-- 第五种--全部显示及截取显示 -->
+<script type="text/javascript">
+	function show(){
+	  var box = document.getElementById("box");//获取id属性值为box的div对象。
+	  var text = box.innerHTML;//将div中的内容赋值给text变量。
+	  var newBox = document.createElement("div");//创建一个新的div对象。
+	  var btn = document.createElement("a");//创建一个新的a对象。
+	  newBox.innerHTML = text.substring(0,20);//截取长度为20的字符串复制给新创建的div。
+	  btn.innerHTML = text.length > 20 ? "...显示全部" : "";//如果整个文章的内容字符串长度超过20，那么就将"...显示全部"复制给新创建的链接，否则将空值赋值给新创建的链接对象。
+	  btn.href = "###";//将新创建链接的href属性值设置为"###"。
+	  btn.onclick = function(){//为新创建的a注册事件处理函数。
+		if(btn.innerHTML == "...显示全部")
+		{
+		  btn.innerHTML = "收起";
+		  newBox.innerHTML = text;
+		}
+		else
+		{
+		  btn.innerHTML = "...显示全部";
+		  newBox.innerHTML = text.substring(0,20);
+		}
+	  }
+	  box.innerHTML = "";//清空box中的内容。
+	  box.appendChild(newBox);//将创建的元素附加在box中。
+	  box.appendChild(btn);//将创建的元素附加在box中。
+	}
+	window.onload=function(){
+		show();
+	}
+</script>
+<body>
+<!-- 第一种 -->
+<button onclick="openShutManager(this,'dataDivId',false,'点击关闭','点击展开')">点击展开</button>
+<!-- 第二种 -->
+<button onclick="openShutManager2(this)">点击展开2</button>
+<!-- 第一二种的div展示 -->
+<div id="dataDivId" style="display:none">
+   内容存放区域
+</div>
+<!-- 第三种 -->
+<div class="classDiv">
+<h1>展开隐藏效果</h1>
+<span id="stateBut" onclick="$use()">收缩</span>
+	<p id="class1content">显示隐藏网页部分内容展开收起页面特效 ==小蜗牛问妈妈：为什么我们从生下来，就要背负这个又硬又重的壳呢？<br />
+	妈妈：因为我们的身体没有骨23sc.cn骼的支撑，只能爬，又爬不快。所以要这个壳的保护！<br />
+	小蜗牛：毛虫姊姊没有骨头，也爬不快，为什么她却不用背这个又硬又重的壳呢？ <br />
+	妈妈：因为毛虫姊姊能变成蝴蝶，23sc.cn天空会保护她啊。 <br />
+	小蜗牛：可是蚯蚓弟弟也没骨头爬不快，也不会变成蝴蝶他什么不背这个又硬又重的壳呢？ <br />
+	妈妈：因为蚯蚓弟弟会钻土, 大地会保护他啊。 <br />
+	小蜗牛哭了起来：我们好可怜，天空不保护，大地也不保护。 <br />
+	蜗牛妈妈安慰他：所以我们有壳啊！我们不靠天，也不靠地，我们靠自己。
+	</p>
+</div>
+<!-- 第四种 -->
+<div id="popDiv" style="height:auto!important;height:20px;border:1px solid grey;" >
+    <label id="method" type="button" style="width:200px;" onclick="openOrClose4()">展示</label>
+        <div id="popTitle" visibility="hidden" style="display:none;">
+                <pre style="word-break:break-all;width:40px;height:300px;">
+                    小蜗牛问妈妈：为什么我们从生下来，就要背负这个又硬又重的壳呢？<br />
+				妈妈：因为我们的身体没有骨23sc.cn骼的支撑，只能爬，又爬不快。所以要这个壳的保护！<br />
+				小蜗牛：毛虫姊姊没有骨头，也爬不快，为什么她却不用背这个又硬又重的壳呢？ <br />
+				妈妈：因为毛虫姊姊能变成蝴蝶，23sc.cn天空会保护她啊。 <br />
+				小蜗牛：可是蚯蚓弟弟也没骨头爬不快，也不会变成蝴蝶他什么不背这个又硬又重的壳呢？ <br />
+				妈妈：因为蚯蚓弟弟会钻土, 大地会保护他啊。 <br />
+				小蜗牛哭了起来：我们好可怜，天空不保护，大地也不保护。 <br />
+				蜗牛妈妈安慰他：所以我们有壳啊！我们不靠天，也不靠地，我们靠自己。
+                </pre>
+         </div>
+            <div id="popForm"> <!-- 表单div -->
+            </div>
+</div>
+<!-- 第五种 -->
+<div id="box">
+				小蜗牛问妈妈：为什么我们从生下来，就要背负这个又硬又重的壳呢？<br />
+				妈妈：因为我们的身体没有骨23sc.cn骼的支撑，只能爬，又爬不快。所以要这个壳的保护！<br />
+				小蜗牛：毛虫姊姊没有骨头，也爬不快，为什么她却不用背这个又硬又重的壳呢？ <br />
+				妈妈：因为毛虫姊姊能变成蝴蝶，23sc.cn天空会保护她啊。 <br />
+				小蜗牛：可是蚯蚓弟弟也没骨头爬不快，也不会变成蝴蝶他什么不背这个又硬又重的壳呢？ <br />
+				妈妈：因为蚯蚓弟弟会钻土, 大地会保护他啊。 <br />
+				小蜗牛哭了起来：我们好可怜，天空不保护，大地也不保护。 <br />
+				蜗牛妈妈安慰他：所以我们有壳啊！我们不靠天，也不靠地，我们靠自己。
+</div>
+</body>
+</html>

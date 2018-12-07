@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
-__author__ = 'bobby'
-__date__ = '2016/10/25 23:34'
+
 import xadmin
 
 from .models import Course, Lesson, Video, CourseResource, BannerCourse
-from organization.models import CourseOrg
+# from organization.models import CourseOrg
 
 
 class LessonInline(object):
     model = Lesson
     extra = 0
 
+
 class CourseResourceInline(object):
     model = CourseResource
     extra = 0
+
 
 class CourseAdmin(object):
     list_display = ['name', 'desc', 'detail', 'degree', 'learn_times', 'students', 'get_zj_nums', 'go_to']
@@ -24,7 +25,7 @@ class CourseAdmin(object):
     list_editable = ['degree', 'desc']
     exclude = ['fav_nums']
     inlines = [LessonInline, CourseResourceInline]
-    style_fields = {"detail":"ueditor"}
+    style_fields = {"detail": "ueditor"}
     import_excel = True
 
     def queryset(self):
@@ -33,7 +34,7 @@ class CourseAdmin(object):
         return qs
 
     def save_models(self):
-        #在保存课程的时候统计课程机构的课程数
+        # 在保存课程的时候统计课程机构的课程数
         obj = self.new_obj
         obj.save()
         if obj.course_org is not None:

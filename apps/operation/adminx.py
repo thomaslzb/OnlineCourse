@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-__author__ = 'bobby'
-__date__ = '2016/10/25 23:59'
 import xadmin
 
 from .models import UserAsk, UserCourse, UserMessage, CourseComments, UserFavorite
+
 
 class UserAskAdmin(object):
     list_display = ['name', 'mobile', 'course_name', 'add_time']
@@ -17,6 +16,7 @@ class UserCourseAdmin(object):
     search_fields = ['user', 'course']
     list_filter = ['user', 'course', 'add_time']
     model_icon = 'fa fa-address-book'
+
 
 class UserMessageAdmin(object):
     list_display = ['user', 'message', 'has_read', 'add_time']

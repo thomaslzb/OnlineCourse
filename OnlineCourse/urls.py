@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 import xadmin
-from django.urls import include, path, re_path
+from django.urls import include, path
 from django.views.generic import TemplateView
+
+from django.conf.urls.static import static
+from django.conf import settings
 
 from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, PasswordResetView, ModifyPwdView
 from organization.views import OrgListView
@@ -44,3 +47,6 @@ Organization url
 urlpatterns += [
     path('org_list/', OrgListView.as_view(), name="org_list"),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

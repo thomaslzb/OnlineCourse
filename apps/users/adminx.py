@@ -1,5 +1,5 @@
 #!/usr/bin/python3.6
-#-*-coding:utf-8-*- 
+# -*-coding:utf-8-*-
 
 import xadmin
 
@@ -10,10 +10,9 @@ from .models import Banner
 
 
 class GlobalSettings(object):
-    site_title = "Course System Management"
+    site_title = "在线课程后台管理"
     site_footer = "Lzb Company"
     menu_style = "accordion"
-
 
 
 class BaseSetting(object):
@@ -30,7 +29,7 @@ class EmailVerifyRecordAdmin(object):
 class BannerAdmin(object):
     list_display = ['title', 'image', 'url','index', 'add_time']
     search_fields = ['title']
-    list_filter =  ['title', 'image', 'url','index', 'add_time']
+    list_filter = ['title', 'image', 'url','index', 'add_time']
 
 
 # register xadmin

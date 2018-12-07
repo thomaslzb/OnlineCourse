@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-__author__ = 'bobby'
-__date__ = '2016/10/25 23:52'
+
 import xadmin
 
 from .models import CityDict, CourseOrg, Teacher
+
 
 class CityDictAdmin(object):
     list_display = ['name', 'desc', 'add_time']
@@ -13,11 +13,11 @@ class CityDictAdmin(object):
 
 
 class CourseOrgAdmin(object):
-    list_display = ['name', 'desc', 'click_nums', 'fav_nums']
+    list_display = ['name', 'tag', 'category', 'city']
     search_fields = ['name', 'desc', 'click_nums', 'fav_nums']
     list_filter = ['name', 'desc', 'click_nums', 'fav_nums']
     relfield_style = 'fk-ajax'
-    style_fields = {"desc":"ueditor"}
+    style_fields = {"desc": "ueditor"}
     model_icon = 'fa fa-university'
 
 
@@ -26,6 +26,7 @@ class TeacherAdmin(object):
     search_fields = ['org', 'name', 'work_years', 'work_company']
     list_filter = ['org', 'name', 'work_years', 'work_company']
     model_icon = 'fa fa-user-md'
+
 
 xadmin.site.register(CityDict, CityDictAdmin)
 xadmin.site.register(CourseOrg, CourseOrgAdmin)
