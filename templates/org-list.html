@@ -7,7 +7,7 @@
     <section>
         <div class="wp">
             <ul  class="crumbs">
-                <li><a href="index.html">首页</a>></li>
+                <li><a href="{% url 'index' %}">首页</a>></li>
                 <li>课程机构</li>
             </ul>
         </div>
@@ -135,7 +135,7 @@
                 </div>
                 <p class="error company-tips" id="jsCompanyTips"></p>
 				<input class="btn" type="text" id="jsStayBtn" value="立即咨询 >" />
-            <input type='hidden' name='csrfmiddlewaretoken' value='5I2SlleZJOMUX9QbwYLUIAOshdrdpRcy' />
+                {%  csrf_token %}
             </form>
 		</div>
 
@@ -162,16 +162,22 @@
             $.ajax({
                 cache: false,
                 type: "POST",
-                url:"/org/add_ask/",
+                url:"{% url 'org:user_ask' %}",
                 data:$('#jsStayForm').serialize(),
                 async: true,
                 success: function(data) {
                     if(data.status == 'success'){
+                        $('#jsCompanyTips').html("")
                         $('#jsStayForm')[0].reset();
-                        alert("提交成功")
+                        alert("用户咨询提交成功！")
                     }else if(data.status == 'fail'){
                         $('#jsCompanyTips').html(data.msg)
                     }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(JSON.stringify(jqXHR));
+                    console.log("jqXHR.responseText :" + jqXHR.responseText);
+                    console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
                 },
             });
         });

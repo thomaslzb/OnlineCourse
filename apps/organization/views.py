@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.views import View
+from django.http import HttpResponse
 from pure_pagination import Paginator, PageNotAnInteger
 
+
 from .models import CourseOrg, CityDict
+from .forms import UserAskForm
+
 
 class OrgListView(View):
     """
@@ -56,4 +60,24 @@ class OrgListView(View):
                                                  "ct": category_code,
                                                  "sort": sort,
                                                  "hot_orgs": hot_orgs,
-                                                 })
+                                                 }
+                      )
+
+
+class UserAskView(View):
+    """
+    user inquire
+    """
+    def post(self, request):
+        userask = UserAskForm(request.POST)
+        if userask.is_valid():
+            userask = userask.save(commit=True)
+            # 注意下一句中的单引号和双引号，如果写反了，在html中的ajax种会出现错误
+            # parsererror: SyntaxError: Unexpected token ' in JSON at position 1
+            return HttpResponse('{"status": "success"}',  content_type='application/json')
+        else:
+            return HttpResponse('{"status": "fail", "msg": "添加出错"}', content_type='application/json')
+
+
+
+

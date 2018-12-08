@@ -597,7 +597,7 @@ $(function() {
     });
 
 	/*列表更多按钮*/
-    $('.listoptions').find('.more').click(function(){
+    $('.listoptions').find('.more').unbind('click').click(function(){
         var height = $('.listoptions .cont').height();
         if(!$('.listoptions .cont').hasClass("opened")){
             $('.listoptions .cont').css({
