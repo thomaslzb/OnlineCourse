@@ -48,6 +48,7 @@ class CourseAdmin(object):
         return super(CourseAdmin, self).post(request, args, kwargs)
 
 
+
 class BannerCourseAdmin(object):
     list_display = ['name', 'desc', 'detail', 'degree', 'learn_times', 'students']
     search_fields = ['name', 'desc', 'detail', 'degree', 'students']

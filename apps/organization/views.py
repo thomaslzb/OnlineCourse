@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from pure_pagination import Paginator, PageNotAnInteger
 
 
-from .models import CourseOrg, CityDict
+from .models import CourseOrg, CityDict, Teacher
 from .forms import UserAskForm
 
 
@@ -15,6 +15,7 @@ class OrgListView(View):
     """
     def get(self, request):
         # All Organization
+        nav_org = True
         all_orgs = CourseOrg.objects.all()
 
         # All City
@@ -60,8 +61,8 @@ class OrgListView(View):
                                                  "ct": category_code,
                                                  "sort": sort,
                                                  "hot_orgs": hot_orgs,
-                                                 }
-                      )
+                                                 "nav_org": nav_org,
+                                                 })
 
 
 class UserAskView(View):
@@ -79,5 +80,81 @@ class UserAskView(View):
             return HttpResponse('{"status": "fail", "msg": "添加出错"}', content_type='application/json')
 
 
+class OrgHomeView(View):
+    """
+    organization home detail
+    """
+    def get(self, request, company_id):
+        nav_org = True
+        home_page = True
 
+        the_org = CourseOrg.objects.get(id=int(company_id))
+        if not the_org:
+            return render(request, 'index.html', {})
+
+        all_course = the_org.course_set.all()[:3]
+        all_teacher = the_org.teacher_set.all()[:3]
+        return render(request, 'org-detail-homepage.html',
+                      {"the_org": the_org,
+                       "all_course": all_course,
+                       "all_teacher": all_teacher,
+                       "company_id": company_id,
+                       "home_page": home_page,
+                       "nav_org": nav_org,
+                       })
+
+
+class OrgDetailCourseView(View):
+    """
+    organization course detail
+    """
+    def get(self, request, company_id):
+        course_page = True
+        the_org = CourseOrg.objects.get(id=int(company_id))
+        if not the_org:
+            return render(request, 'index.html', {})
+
+        all_course = the_org.course_set.all()
+        return render(request, 'org-detail-course.html',
+                      {"the_org": the_org,
+                       "all_course": all_course,
+                       "company_id": company_id,
+                       "course_page": course_page,
+                       })
+
+
+class OrgDetailTeacherView(View):
+    """
+    organization teacher detail
+    """
+    def get(self, request, company_id):
+        teacher_page = True
+        the_org = CourseOrg.objects.get(id=int(company_id))
+        if not the_org:
+            return render(request, 'index.html', {})
+
+        all_teacher = the_org.teacher_set.all()
+        return render(request, 'org-detail-teachers.html',
+                      {"the_org": the_org,
+                       "all_teacher": all_teacher,
+                       "company_id": company_id,
+                       "teacher_page": teacher_page,
+                       })
+
+
+class OrgDetailDescView(View):
+    """
+    organization desc detail
+    """
+    def get(self, request, company_id):
+        desc_page = True
+        the_org = CourseOrg.objects.get(id=int(company_id))
+        if not the_org:
+            return render(request, 'index.html', {})
+
+        return render(request, 'org-detail-desc.html',
+                      {"the_org": the_org,
+                       "company_id": company_id,
+                       "desc_page": desc_page,
+                       })
 
