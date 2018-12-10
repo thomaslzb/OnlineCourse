@@ -1,0 +1,56 @@
+{% extends 'org_base.html' %}
+{% load staticfiles %}
+{% block title %}机构教师列表页{% endblock %}
+{% block companyheader %}
+    <img class="fl" style="width: 112px;height: 103px" src="{{ MEDIA_URL }}{{ the_org.image }}"/>
+    <div class="head fl">
+        <h1>
+            {{ the_org.name }}
+            <img src="{% static 'images/authentication.png' %}"/>
+            <img src="{% static 'images/gold.png' %}"/>
+        </h1>
+        <p class="fl">
+            <span class="fl" style="margin-top:8px;color:#848484;">推荐指数： </span>
+            <span class="precision company-credit" data-star-scope="5.0"></span>
+            <span class="key">5.0</span>
+        </p>
+    </div>
+{% endblock %}
+{% block crumbs %}机构教师{% endblock %}
+{% block content %}
+<div class="right companycenter layout" >
+    <div class="head">
+        <h1>机构讲师</h1>
+    </div>
+    <div class="messagelist">
+        <div class=" butler_list butler-fav-box">
+            {% for teacher in all_teacher %}
+                <dl class="des users">
+                    <dt>
+                        <a href="">
+                        <img width="120" height="120" class="scrollLoading" data-url="{{ MEDIA_URL }}{{ teacher.image }}"/>
+                        </a>
+                    </dt>
+                    <dd>
+                        <h1>
+                            <a href="">
+                            {{ teacher.name }}<span class="key">已认证</span>
+                            </a>
+                        </h1>
+                        <ul class="cont clearfix">
+                            <li class="time">工作年限：<span>{{ teacher.work_years }} 年 </span></li>
+                            <li class="c7"> 课程数：<span> {{ teacher.get_course_nums }}</span></li>
+                        </ul>
+                    </dd>
+                </dl>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+
+

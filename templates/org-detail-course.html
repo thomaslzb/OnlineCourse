@@ -1,0 +1,56 @@
+{% extends 'org_base.html' %}
+{% load staticfiles %}
+{% block title %}机构课程列表页{% endblock %}
+{% block companyheader %}
+    <img class="fl" style="width: 112px;height: 103px" src="{{ MEDIA_URL }}{{ the_org.image }}"/>
+    <div class="head fl">
+        <h1>
+            {{ the_org.name }}
+            <img src="{% static 'images/authentication.png' %}"/>
+            <img src="{% static 'images/gold.png' %}"/>
+        </h1>
+        <p class="fl">
+            <span class="fl" style="margin-top:8px;color:#848484;">推荐指数： </span>
+            <span class="precision company-credit" data-star-scope="5.0"></span>
+            <span class="key">5.0</span>
+        </p>
+    </div>
+{% endblock %}
+{% block crumbs %}机构课程{% endblock %}
+{% block content %}
+<div class="right companycenter layout" >
+		<div class="head">
+			<h1>机构课程</h1>
+		</div>
+    <div class="brief group_list">
+        {% for course in all_course %}
+            <div class="module1_5 box">
+                <a class="comp-img-box" href="{% url 'org:org_detail_course' company_id %}">
+
+                    <img width="214" height="195" src="{{ MEDIA_URL }}{{ course.image }}"/>
+                </a>
+                <div class="des">
+                    <a href="{% url 'org:org_detail_course' company_id %}"><h2>{{ course.name }}</h2></a>
+                    <span class="fl">课时：<i class="key">{{ course.learn_times }}</i></span>
+                    <span class="fr">学习人数：{{ course.students }}</span>
+                </div>
+                <div class="bottom">
+                    <span class="fl">{{ the_org.name }}</span>
+                     <span class="star fr  notlogin
+                        " data-favid="13" data-fav-type="4">
+                        {{ the_org.fav_nums }}
+                    </span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="pageturn">
+        <ul class="pagelist">
+            <li class="active"><a href="?page=1">1</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+
+
