@@ -23,7 +23,7 @@
 			<h1>机构课程</h1>
 		</div>
     <div class="brief group_list">
-        {% for course in all_course %}
+        {% for course in all_courses.object_list %}
             <div class="module1_5 box">
                 <a class="comp-img-box" href="{% url 'org:org_detail_course' company_id %}">
 
@@ -38,7 +38,7 @@
                     <span class="fl">{{ the_org.name }}</span>
                      <span class="star fr  notlogin
                         " data-favid="13" data-fav-type="4">
-                        {{ the_org.fav_nums }}
+                        {{ course.fav_nums }}
                     </span>
                 </div>
             </div>
@@ -46,8 +46,22 @@
     </div>
     <div class="pageturn">
         <ul class="pagelist">
-            <li class="active"><a href="?page=1">1</a></li>
-        </ul>
+            {% if all_courses.has_previous %}
+                <li class="long"><a href="?{{ all_courses.previous_page_number.querystring }}">上一页</a></li>
+            {% endif %}
+            {% for page in all_courses.pages %}
+                {% if page %}
+                    {% ifequal page all_courses.number %}
+                        <li class="active"><a href="?page=1">{{ page }}</a></li>
+                    {% else %}
+                        <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
+                    {% endifequal %}
+                {% endif %}
+            {% endfor %}
+            {% if all_courses.has_next %}
+                <li class="long"><a href="?{{ all_courses.next_page_number.querystring }}">下一页</a></li>
+            {% endif %}
+       </ul>
     </div>
 </div>
 {% endblock %}

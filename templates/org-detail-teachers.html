@@ -24,11 +24,12 @@
     </div>
     <div class="messagelist">
         <div class=" butler_list butler-fav-box">
-            {% for teacher in all_teacher %}
+            {% for teacher in all_teachers.object_list %}
                 <dl class="des users">
                     <dt>
                         <a href="">
-                        <img width="120" height="120" class="scrollLoading" data-url="{{ MEDIA_URL }}{{ teacher.image }}"/>
+                        <img width="120" height="120" class="scrollLoading"
+                             data-url="{{ MEDIA_URL }}{{ teacher.image }}"/>
                         </a>
                     </dt>
                     <dd>
@@ -44,10 +45,28 @@
                     </dd>
                 </dl>
             {% endfor %}
+            </div>
+                <div class="pageturn">
+                    <ul class="pagelist">
+                        {% if all_teachers.has_previous %}
+                            <li class="long"><a href="?{{ all_teachers.previous_page_number.querystring }}">上一页</a></li>
+                        {% endif %}
+                        {% for page in all_teachers.pages %}
+                            {% if page %}
+                                {% ifequal page all_teachers.number %}
+                                    <li class="active"><a href="?page=1">{{ page }}</a></li>
+                                {% else %}
+                                    <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
+                                {% endifequal %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if all_teachers.has_next %}
+                            <li class="long"><a href="?{{ all_teachers.next_page_number.querystring }}">下一页</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
         </div>
     </div>
-</div>
-
 {% endblock %}
 
 

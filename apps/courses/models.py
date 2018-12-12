@@ -72,7 +72,7 @@ class Lesson(models.Model):
         return self.name
 
     def get_lesson_video(self):
-        #获取章节视频
+        # 获取章节视频
         return self.video_set.all()
 
 

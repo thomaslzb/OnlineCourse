@@ -5,7 +5,8 @@ from django.http import HttpResponse
 from pure_pagination import Paginator, PageNotAnInteger
 
 
-from .models import CourseOrg, CityDict, Teacher
+from .models import CourseOrg, CityDict
+from operation.models import UserFavorite
 from .forms import UserAskForm
 
 
@@ -89,8 +90,15 @@ class OrgHomeView(View):
         home_page = True
 
         the_org = CourseOrg.objects.get(id=int(company_id))
+
         if not the_org:
             return render(request, 'index.html', {})
+
+        # 判断用户是否已经收藏此机构
+        has_favorite = False
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user, fav_id=int(company_id), fav_type=2):
+                has_favorite = True
 
         all_course = the_org.course_set.all()[:3]
         all_teacher = the_org.teacher_set.all()[:3]
@@ -101,6 +109,7 @@ class OrgHomeView(View):
                        "company_id": company_id,
                        "home_page": home_page,
                        "nav_org": nav_org,
+                       "has_favorite": has_favorite,
                        })
 
 
@@ -114,12 +123,29 @@ class OrgDetailCourseView(View):
         if not the_org:
             return render(request, 'index.html', {})
 
+        # 判断用户是否已经收藏此机构
+        has_favorite = False
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user, fav_id=int(company_id), fav_type=2):
+                has_favorite = True
+
         all_course = the_org.course_set.all()
+
+        # 分页
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_course, 12, request=request)
+        p_courses = p.page(page)
+
         return render(request, 'org-detail-course.html',
                       {"the_org": the_org,
-                       "all_course": all_course,
+                       "all_courses": p_courses,
                        "company_id": company_id,
                        "course_page": course_page,
+                       "has_favorite": has_favorite,
                        })
 
 
@@ -133,12 +159,29 @@ class OrgDetailTeacherView(View):
         if not the_org:
             return render(request, 'index.html', {})
 
-        all_teacher = the_org.teacher_set.all()
+        # 判断用户是否已经收藏此机构
+        has_favorite = False
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user, fav_id=int(company_id), fav_type=2):
+                has_favorite = True
+
+        all_teachers = the_org.teacher_set.all()
+
+        # 分页
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_teachers, 8, request=request)
+        p_teachers = p.page(page)
+
         return render(request, 'org-detail-teachers.html',
                       {"the_org": the_org,
-                       "all_teacher": all_teacher,
+                       "all_teachers": p_teachers,
                        "company_id": company_id,
                        "teacher_page": teacher_page,
+                       "has_favorite": has_favorite
                        })
 
 
@@ -152,9 +195,56 @@ class OrgDetailDescView(View):
         if not the_org:
             return render(request, 'index.html', {})
 
+        # 判断用户是否已经收藏此机构
+        has_favorite = False
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(user=request.user, fav_id=int(company_id), fav_type=2):
+                has_favorite = True
+
         return render(request, 'org-detail-desc.html',
                       {"the_org": the_org,
                        "company_id": company_id,
                        "desc_page": desc_page,
+                       "has_favorite": has_favorite,
                        })
+
+
+class AddFavoriteView(View):
+    """
+    User add favorite or cancel favorate
+    """
+    def post(self, request):
+        fav_id = request.POST.get("fav_id", 0)
+        fav_type = request.POST.get("fav_type", 0)
+
+        if not request.user.is_authenticated:
+            """
+            user isn't login in
+            """
+            return HttpResponse('{"status": "fail", "msg": "用户未登录" }', content_type='application/json')
+
+        if int(fav_type) == 0 or int(fav_id) == 0:
+            return HttpResponse('{"status": "fail", "msg": "收藏出错" }', content_type='application/json')
+
+        exist_record = UserFavorite.objects.filter(user=request.user, fav_id=int(fav_id), fav_type=int(fav_type))
+        if exist_record:
+            """
+            cancel user favorite
+            """
+            exist_record.delete()
+            return HttpResponse('{"status": "success", "msg": "收藏" }', content_type='application/json')
+        else:
+            user_favorite = UserFavorite()
+            user_favorite.user = request.user
+            user_favorite.fav_id = int(fav_id)
+            user_favorite.fav_type = int(fav_type)
+            user_favorite.save()
+            return HttpResponse('{"status": "success", "msg": "已收藏" }', content_type='application/json')
+
+
+class TeacherListView(View):
+    def get(self, request):
+        nav_teacher = True
+        return render(request, "teachers-list.html", {"nav_teacher": nav_teacher,
+                                                      })
 

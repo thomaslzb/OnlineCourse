@@ -2,7 +2,7 @@
 from django.urls import path
 
 from .views import OrgListView, UserAskView
-from .views import OrgHomeView, OrgDetailCourseView, OrgDetailTeacherView, OrgDetailDescView
+from .views import OrgHomeView, OrgDetailCourseView, OrgDetailTeacherView, OrgDetailDescView, AddFavoriteView
 
 """
 Organization url
@@ -26,4 +26,9 @@ urlpatterns += [
     path('org_detail_course/<company_id>/', OrgDetailCourseView.as_view(), name='org_detail_course'),
     path('org_detail_teacher/<company_id>/', OrgDetailTeacherView.as_view(), name='org_detail_teacher'),
     path('org_detail_desc/<company_id>/', OrgDetailDescView.as_view(), name='org_detail_desc'),
+
+    # user favorite or cancel favorite
+    path('add_favorite/', AddFavoriteView.as_view(), name='add_favorite'),
 ]
+
+

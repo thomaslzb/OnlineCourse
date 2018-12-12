@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, PasswordResetView, ModifyPwdView
-
+from organization.views import TeacherListView
 
 # xadmin.autodiscover()
 #
@@ -46,6 +46,21 @@ Organization url
 urlpatterns += [
     path('org/', include('organization.urls', namespace='org')),
 ]
+
+"""
+Course url
+"""
+urlpatterns += [
+    path('course/', include('courses.urls', namespace='courses')),
+]
+
+"""
+Teachers url
+"""
+urlpatterns += [
+    path('teacher/list/', TeacherListView.as_view(), name="teacher_list"),
+]
+
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
