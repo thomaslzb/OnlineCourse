@@ -41,6 +41,7 @@ class Course(models.Model):
     go_to.short_description = "跳转"
 
     def get_learn_users(self):
+        # 获取课程用户
         return self.usercourse_set.all()[:5]
 
     def get_course_lesson(self):

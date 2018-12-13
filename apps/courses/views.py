@@ -10,21 +10,16 @@ class CourseListView(View):
     def get(self, request):
         nav_course = True
 
-        sort = request.GET.get('sort', "")
-        sort_students = False
-        sort_all = False
-        sort_hot = False
-        if sort == "hot":
-            sort_hot = True
-            all_courses = Course.objects.order_by("-fav_nums")
-        elif sort == "students":
-            sort_students = True
-            all_courses = Course.objects.order_by("-students")
-        else:
-            sort_all = True
-            all_courses = Course.objects.order_by("-add_time")
+        all_courses = Course.objects.all().order_by("-add_time")
 
-        hot_courses = Course.objects.order_by("-fav_nums")[:3]
+        sort = request.GET.get('sort', "")
+        if sort:
+            if sort == "hot":
+                all_courses = Course.objects.order_by("-click_nums")
+            elif sort == "students":
+                all_courses = Course.objects.order_by("-students")
+
+        hot_courses = Course.objects.order_by("-click_nums")[:5]
 
         # 分页
         try:
@@ -38,16 +33,23 @@ class CourseListView(View):
         return render(request, "course-list.html", {"nav_course": nav_course,
                                                     "all_courses": p_courses,
                                                     "hot_courses": hot_courses,
-                                                    "sort_hot": sort_hot,
-                                                    "sort_students": sort_students,
-                                                    "sort_all": sort_all,
+                                                    "sort": sort,
                                                     })
 
 
 class CourseDetailView(View):
     def get(self, request, course_id):
         nav_course = True
+        course_detail = Course.objects.get(id=int(course_id))
+        if not course_detail:
+            """
+            无此课程
+            """
+            return render(request, "course-list.html", {"nav_course": nav_course,
+                                                        })
+        # users = Course.get_learn_users()
 
         return render(request, "course-detail.html", {"nav_course": nav_course,
-                                                      "course_id": course_id
-                                                    })
+                                                      "course_detail": course_detail,
+
+                                                      })

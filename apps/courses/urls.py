@@ -16,7 +16,7 @@ urlpatterns = [
 
 # course detail
 urlpatterns += [
-    path('course_detail/<course_id>/', CourseDetailView.as_view(), name='course_detail'),
+    path('detail/<course_id>/', CourseDetailView.as_view(), name='detail'),
 ]
 
 
