@@ -79,12 +79,12 @@
                         {% for course in hot_courses %}
                             <dl>
                             <dt>
-                                <a target="_blank" href="">
+                                <a target="_blank" href="{% url 'courses:detail' course.id %}">
                                     <img width="240" height="220" class="scrollLoading" src="{{ MEDIA_URL }}{{ course.image }}"/>
                                 </a>
                             </dt>
                             <dd>
-                                <a target="_blank" href=""><h2>{{ course.name }}</h2></a>
+                                <a target="_blank" href="{% url 'courses:detail' course.id %}"><h2>{{ course.name }}</h2></a>
                                 <span class="fl">难度：<i class="key">{{ course.get_degree_display }}</i></span>
                             </dd>
                         </dl>

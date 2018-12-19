@@ -27,7 +27,6 @@
                                 <img width="440" height="445"
                                      src="{{ MEDIA_URL }}{{ course_detail.image }}" class="jqzoom" />
                             </div>
-
                         </div>
                         <div class="des">
                             <h1 title="{{ course_detail.name }}">{{ course_detail.name }}</h1>
@@ -47,24 +46,26 @@
                                     <span title="">{{ course_detail.category }}</span>
                                 </li>
                                 <li class="piclist"><span class="pram word4">学习用户：</span>
-                                    {% for couser_user in course_detail.get_learn_users %}
+                                    {% for courser_user in course_detail.get_learn_users %}
                                         <span class="pic">
-                                            <img width="40" height="40" src="{{ MEDIA_URL }}{{ couser_user.user.image }}"/>
+                                            <img width="40" height="40" src="{{ MEDIA_URL }}{{ courser_user.user.image }}"/>
                                         </span>
                                     {% endfor %}
                                 </li>
                             </ul>
                             <div class="btns">
-                                <div class="btn colectgroupbtn"  id="jsLeftBtn">
-                                      收藏
+                                <div class="btn colectgroupbtn" id="jsLeftBtn">
+                                      {% if has_fav_course %}已收藏{% else %}收藏{% endif %}
                                 </div>
-                                    <div class="buy btn"><a style="color: white" href="course-video.html">开始学习</a></div>
+                                <div class="buy btn"><a style="color: white" href="{% url 'courses:course_info' course_detail.id %}">
+                                    开始学习</a>
+                                </div>
                             </div>
                         </div>
                         <div class="group-share-box">
                             <div class="bdsharebuttonbox"
-                                 data-text="django开始了"
-                                 data-desc="我在#慕课网#发现了"
+                                 data-text="{{ course_detail.name }}"
+                                 data-desc="我在#在线课程网#发现了"
                                  data-comment=""
                                  data-url="/group/groupdetail/15/">
                                 <span class="fl">分享到：</span>
@@ -83,21 +84,21 @@
                             <p>{{ course_detail.course_org.tag }}</p>
                         </div>
                         <div class="pic">
-                            <a href="/company/14/">
+                            <a href="{% url 'org:org_home' course_detail.course_org.id %}">
                                 <img width="150" height="80" src="{{ MEDIA_URL }}{{ course_detail.course_org.image }}"/>
                             </a>
                         </div>
-                        <a href="/company/14/">
+                        <a href="{% url 'org:org_home' course_detail.course_org.id %}">
                             <h2 class="center" title="{{ course_detail.course_org.name}}">{{ course_detail.course_org.name}}</h2>
                         </a>
                         <div class="btn  notlogin
                              "data-favid="14" id="jsRightBtn">
-                             已收藏
+                             {% if has_fav_org %}已收藏{% else %}收藏{% endif %}
                         </div>
                         <div class="clear">
                             <ul>
                                 <li>
-                                    <span>课 &nbsp;程&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   9999</span>
+                                    <span>课 &nbsp;程&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   {{ course_detail.course_org.course_nums }}</span>
                                 </li>
                                 <li>
                                     <span>教 &nbsp;师&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {{ course_detail.course_org.get_teacher_nums }}</span>
@@ -206,17 +207,20 @@
 			<div class="right layout">
 				<div class="head">相关课程推荐</div>
                 <div class="group_recommend">
+                    {% for relate_course in relate_courses %}
                         <dl>
                             <dt>
-                                <a target="_blank" href="">
-                                    <img width="240" height="220" class="scrollLoading" src="../media/courses/2016/11/540e57300001d6d906000338-240-135_mvvGYHL.jpg"/>
+                                <a target="_blank" href="{% url 'courses:detail' relate_course.id %}">
+                                    <img width="240" height="220" class="scrollLoading"
+                                         src="{{ MEDIA_URL }}{{ relate_course.image }}"/>
                                 </a>
                             </dt>
                             <dd>
-                                <a target="_blank" href=""><h2> django实战项目</h2></a>
-                                <span class="fl">学习时长：<i class="key">0</i></span>
+                                <a target="_blank" href=""><h2>{{ relate_course.name }}</h2></a>
+                                <span class="fl">学习时长：<i class="key">{{ relate_course.learn_time }}</i></span>
                             </dd>
                         </dl>
+                    {% endfor %}
                 </div>
 			</div>
 		</div>
@@ -231,11 +235,11 @@
         $.ajax({
             cache: false,
             type: "POST",
-            url:"/org/add_fav/",
+            url:"{% url 'org:add_favorite' %}",
             data:{'fav_id':fav_id, 'fav_type':fav_type},
             async: true,
             beforeSend:function(xhr, settings){
-                xhr.setRequestHeader("X-CSRFToken", "5I2SlleZJOMUX9QbwYLUIAOshdrdpRcy");
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
             },
             success: function(data) {
                 if(data.status == 'fail'){
@@ -249,17 +253,20 @@
                     current_elem.text(data.msg)
                 }
             },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(JSON.stringify(jqXHR));
+                console.log("jqXHR.responseText :" + jqXHR.responseText);
+                console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+            },
         });
     }
 
     $('#jsLeftBtn').on('click', function(){
-        add_fav($(this), 10, 1);
+        add_fav($(this), {{ course_detail.id }}, 1);
     });
 
     $('#jsRightBtn').on('click', function(){
-        add_fav($(this), 2, 2);
+        add_fav($(this), {{ course_detail.course_org.id }}, 2);
     });
-
-
-    </script>
+</script>
 {% endblock %}

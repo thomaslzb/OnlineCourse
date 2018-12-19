@@ -93,26 +93,26 @@
                 </dl>
             {% endfor %}
 
-		</div>
-		 <div class="pageturn">
-            <ul class="pagelist">
-                {% if all_orgs.has_previous %}
-                    <li class="long"><a href="?{{ all_orgs.previous_page_number.querystring }}">上一页</a></li>
-                {% endif %}
-                {% for page in all_orgs.pages %}
-                    {% if page %}
-                        {% ifequal page all_orgs.number %}
-                            <li class="active"><a href="?page=1">{{ page }}</a></li>
-                        {% else %}
-                            <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
-                        {% endifequal %}
+    		</div>
+            <div class="pageturn">
+                <ul class="pagelist">
+                    {% if all_orgs.has_previous %}
+                        <li class="long"><a href="?{{ all_orgs.previous_page_number.querystring }}">上一页</a></li>
                     {% endif %}
-                {% endfor %}
-                {% if all_orgs.has_next %}
-                    <li class="long"><a href="?{{ all_orgs.next_page_number.querystring }}">下一页</a></li>
-                {% endif %}
-            </ul>
-        </div>
+                    {% for page in all_orgs.pages %}
+                        {% if page %}
+                            {% ifequal page all_orgs.number %}
+                                <li class="active"><a href="?page=1">{{ page }}</a></li>
+                            {% else %}
+                                <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
+                            {% endifequal %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if all_orgs.has_next %}
+                        <li class="long"><a href="?{{ all_orgs.next_page_number.querystring }}">下一页</a></li>
+                    {% endif %}
+                </ul>
+            </div>
 		</div>
 	</div>
 	<div class="right companyright">
