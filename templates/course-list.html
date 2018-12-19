@@ -27,50 +27,50 @@
                     </div>
                     <div id="inWindow">
                         <div class="tab_cont " id="content">
-                        <div class="group_list">
-                            {% for course in all_courses.object_list %}
-                                <div class="box">
-                                    <a href="{% url 'courses:detail' course.id %}">
-                                        <img width="280" height="350" class="scrollLoading" src="{{ MEDIA_URL }}{{ course.image }}"/>
-                                    </a>
-                                    <div class="des">
+                            <div class="group_list">
+                                {% for course in all_courses.object_list %}
+                                    <div class="box">
                                         <a href="{% url 'courses:detail' course.id %}">
-                                            <h2>{{ course.name }}</h2>
+                                            <img width="280" height="350" class="scrollLoading" src="{{ MEDIA_URL }}{{ course.image }}"/>
                                         </a>
-                                        <span class="fl">时长：<i class="key">{{ course.learn_times }}</i></span>
-                                        <span class="fr">学习人数：{{ course.students }}</span>
+                                        <div class="des">
+                                            <a href="{% url 'courses:detail' course.id %}">
+                                                <h2>{{ course.name }}</h2>
+                                            </a>
+                                            <span class="fl">时长：<i class="key">{{ course.learn_times }}</i></span>
+                                            <span class="fr">学习人数：{{ course.students }}</span>
+                                        </div>
+                                        <div class="bottom">
+                                            <a href="{% url 'courses:detail' course.id %}{% url 'courses:detail' course.id %}">
+                                                <span class="fl">{{ course.course_org }}</span></a>
+                                            <span class="star fr  notlogin
+                                                " data-favid="15">
+                                                {{ course.fav_nums }}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div class="bottom">
-                                        <a href="{% url 'courses:detail' course.id %}{% url 'courses:detail' course.id %}">
-                                            <span class="fl">{{ course.course_org }}</span></a>
-                                        <span class="star fr  notlogin
-                                            " data-favid="15">
-                                            {{ course.fav_nums }}
-                                        </span>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <div class="pageturn">
-                            <ul class="pagelist">
-                                {% if all_courses.has_previous %}
-                                    <li class="long"><a href="?{{ all_courses.previous_page_number.querystring }}">上一页</a></li>
-                                {% endif %}
-                                {% for page in all_courses.pages %}
-                                    {% if page %}
-                                        {% ifequal page all_courses.number %}
-                                            <li class="active"><a href="?page=1">{{ page }}</a></li>
-                                        {% else %}
-                                            <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
-                                        {% endifequal %}
-                                    {% endif %}
                                 {% endfor %}
-                                {% if all_courses.has_next %}
-                                    <li class="long"><a href="?{{ all_courses.next_page_number.querystring }}">下一页</a></li>
-                                {% endif %}
-                            </ul>
+                            </div>
+                            <div class="pageturn">
+                                <ul class="pagelist">
+                                    {% if all_courses.has_previous %}
+                                        <li class="long"><a href="?{{ all_courses.previous_page_number.querystring }}">上一页</a></li>
+                                    {% endif %}
+                                    {% for page in all_courses.pages %}
+                                        {% if page %}
+                                            {% ifequal page all_courses.number %}
+                                                <li class="active"><a href="?page=1">{{ page }}</a></li>
+                                            {% else %}
+                                                <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
+                                            {% endifequal %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if all_courses.has_next %}
+                                        <li class="long"><a href="?{{ all_courses.next_page_number.querystring }}">下一页</a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
                 <div class="right layout">

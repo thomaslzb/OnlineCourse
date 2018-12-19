@@ -63,13 +63,12 @@
                 <div class="content">
                     <div class="mod-tab-menu">
                             <ul class="course-menu clearfix">
-                                <li><a class="ui-tabs-active active" id="learnOn"
+                                <li><a class="" id="learnOn"
                                        href="{% url 'courses:course_info' course_detail.id %}"><span>章节</span></a>
                                 </li>
-                                <li><a id="commentOn" class="" href="{% url 'courses:course_comment' course_detail.id %}"><span>评论</span></a></li>
+                                <li><a id="commentOn" class="ui-tabs-active active" href="{% url 'courses:course_comment' course_detail.id %}"><span>评论</span></a></li>
                             </ul>
                         </div>
-
                     <!--发布评论-->
                     <div id="js-pub-container" class="issques clearfix js-form">
                         <div class="wgt-ipt-wrap pub-editor-wrap " id="js-pl-input-fake">
@@ -115,7 +114,7 @@
                                     {% ifequal page course_comments.number %}
                                         <li class="active"><a href="?page=1">{{ page }}</a></li>
                                     {% else %}
-                                        <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
+                                        <li><a href="?{{ page.querystring }}">{{ page }}</a></li>
                                     {% endifequal %}
                                 {% endif %}
                             {% endfor %}
@@ -124,7 +123,7 @@
                             {% endif %}
                         </ul>
                     </div>
-                </div>
+                    </div>
                 <div class="aside r">
                     <div class="bd">
                         <div class="box mb40">

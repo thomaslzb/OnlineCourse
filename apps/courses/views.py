@@ -136,7 +136,7 @@ class CourseCommentView(LoginRequiredMixin, View):
         except PageNotAnInteger:
             page = 1
 
-        p = Paginator(course_comments, 4, request=request)
+        p = Paginator(course_comments, 8, request=request)
         p_comments = p.page(page)
 
         # 保存用户开始学习此课程的信息

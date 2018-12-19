@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from pure_pagination import Paginator, PageNotAnInteger
 
 
-from .models import CourseOrg, CityDict
+from .models import CourseOrg, CityDict, Teacher
 from operation.models import UserFavorite
 from .forms import UserAskForm
 
@@ -243,8 +243,57 @@ class AddFavoriteView(View):
 
 
 class TeacherListView(View):
+    """
+    教师列表页
+    """
     def get(self, request):
         nav_teacher = True
+
+        # 全部教师
+        # sort students and courses
+        sort = request.GET.get('sort', "")
+        all_teachers = Teacher.objects.all().order_by('add_time')
+        if sort == "hot":
+            all_teachers = Teacher.objects.all().order_by('-click_nums')
+
+        all_teachers_nums = all_teachers.count()
+        # 分页
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_teachers, 8, request=request)
+        p_teachers = p.page(page)
+
+        # 教师排行榜-根据点击数
+        top_teachers = Teacher.objects.all().order_by('-click_nums')[:3]
+
         return render(request, "teachers-list.html", {"nav_teacher": nav_teacher,
+                                                      "all_teachers": p_teachers,
+                                                      "all_teachers_nums": all_teachers_nums,
+                                                      "top_teachers": top_teachers,
+                                                      "sort": sort,
                                                       })
 
+
+class TeacherDetailView(View):
+    """
+    教师详情页
+    """
+    def get(self, request, teacher_id):
+        nav_teacher = True
+
+        # 教师排行
+        top_teachers = Teacher.objects.all().order_by('-click_nums')[:3]
+
+        # 取得教师的资料
+        teacher = Teacher.objects.get(id=teacher_id)
+
+        # 取得教师的课程
+
+        return render(request, "teacher-detail.html", {"nav_teacher": nav_teacher,
+                                                       "top_teachers": top_teachers,
+                                                       "teacher": teacher,
+
+                                                       })

@@ -3,6 +3,8 @@ from django.urls import path
 
 from .views import OrgListView, UserAskView
 from .views import OrgHomeView, OrgDetailCourseView, OrgDetailTeacherView, OrgDetailDescView, AddFavoriteView
+from .views import TeacherListView, TeacherDetailView
+
 
 """
 Organization url
@@ -32,3 +34,8 @@ urlpatterns += [
 ]
 
 
+# teacher list
+urlpatterns += [
+    path('teacher_list/', TeacherListView.as_view(), name='teacher_list'),
+    path('teacher_detail/<teacher_id>/', TeacherDetailView.as_view(), name='teacher_detail'),
+]
