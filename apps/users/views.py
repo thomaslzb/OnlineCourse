@@ -11,6 +11,7 @@ from django.views.generic.base import View
 from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm
 from utils.email_send import send_register_email
+from utils.mixin_utils import LoginRequiredMixin
 
 
 class CustomBackend(ModelBackend):
@@ -139,7 +140,33 @@ class ModifyPwdView(View):
             return render(request, "password_reset.html", {"modifypwd_form": modifypwdform, "email": email})
 
 
-def user_logout(request):
-    logout(request)
-    return render(request, "index.html", {})
+class UserInfoView(LoginRequiredMixin, View):
+    """
+    User info
+    """
+    def get(self, request):
+        return render(request, 'usercenter-info.html', {})
 
+
+class UserMyCourseView(LoginRequiredMixin, View):
+    """
+    Users Courses
+    """
+    def get(self, request):
+        return render(request, 'usercenter-mycourse.html', {})
+
+
+class UserMyFavoriteView(LoginRequiredMixin, View):
+    """
+    Users Favorites
+    """
+    def get(self, request):
+        return render(request, 'usercenter-fav-org.html', {})
+
+
+class UserMessageView(LoginRequiredMixin, View):
+    """
+    Users Message
+    """
+    def get(self, request):
+        return render(request, 'usercenter-message.html', {})

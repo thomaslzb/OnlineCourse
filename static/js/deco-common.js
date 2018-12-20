@@ -63,18 +63,18 @@ function search_click(){
     var type = $('#jsSelectOption').attr('data-value'),
         keywords = $('#search_keywords').val(),
         request_url = '';
+
     if(keywords == ""){
         return
     }
-    alert()
+
     if(type == "course"){
-        request_url = "{% url 'course:list' %}?keywords="+keywords
+        request_url = "/course/list/?keywords="+keywords
     }else if(type == "teacher"){
-        request_url = "{% url 'org:teacher_list' %}?keywords="+keywords
+        request_url = "/org/teacher_list/?keywords="+keywords
     }else if(type == "org"){
-        request_url = "{% url'org:list' %}?keywords="+keywords
+        request_url = "/org/list/?keywords="+keywords
     }
-    alert(request_url)
     window.location.href = request_url
 }
 
@@ -417,12 +417,12 @@ $(function() {
 
 
     $('#jsSearchBtn').on('click',function(){
-        search_click()
+        search_click();
     });
-    //搜索表单键盘事件
+    //搜索表单键盘事件-回车
     $("#search_keywords").keydown(function(event){
         if(event.keyCode == 13){
-             $('#jsSearchBtn').trigger('click');
+          $('#jsSearchBtn').trigger('click');
         }
     });
 

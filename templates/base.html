@@ -23,19 +23,19 @@
                         <div class="fl"><p>服务电话：<b>88888888</b></p></div>
                             <div class="personal">
                                 <dl class="user fr">
-                                    <dd>{{ user.username }}<img class="down fr" src="{% static 'images/top_down.png' %}"/></dd>
-                                    <dt><img width="20" height="20" src="{% static 'media/image/2016/12/default_big_14.png' %}"/></dt>
+                                    <dd>{{ request.user.username }}<img class="down fr" src="{% static 'images/top_down.png' %}"/></dd>
+                                    <dt><img width="20" height="20" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
                                 </dl>
                                 <div class="userdetail">
                                     <dl>
-                                        <dt><img width="80" height="80" src="{% static 'media/image/2016/12/default_big_14.png' %}"/></dt>
+                                        <dt><img width="80" height="80" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
                                         <dd>
                                             <h2>{{ request.user.nick_name }}</h2>
                                             <p>{{ request.user.username }}</p>
                                         </dd>
                                     </dl>
                                     <div class="btn">
-                                        <a class="personcenter fl" href="usercenter-info.html">进入个人中心</a>
+                                        <a class="personcenter fl" href="{% url 'users:info' %}">进入个人中心</a>
                                         <a class="fr" href="/logout/">退出</a>
                                     </div>
                                 </div>
@@ -132,7 +132,6 @@
 <script src="{% static 'js/plugins/queryCity/js/public.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/unslider.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/plugins/jquery.scrollLoading.js' %}"  type="text/javascript"></script>
-<script src="{% static 'js/deco-common.js' %}"  type="text/javascript"></script>
 <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
 </body>
 </html>

@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 import xadmin
 from django.urls import include, path
-from django.views.generic import TemplateView
 
 from django.conf.urls.static import static
 from django.conf import settings
 
 from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, PasswordResetView, ModifyPwdView
-from organization.views import TeacherListView
 from views import IndexView
 
 # xadmin.autodiscover()
@@ -28,9 +26,6 @@ urlpatterns += [
     path('', IndexView.as_view(), name="index"),
 ]
 
-"""
-user url 
-"""
 urlpatterns += [
     path('login/', LoginView.as_view(), name="login"),
     path('register/', RegisterView.as_view(), name="register"),
@@ -53,6 +48,13 @@ Course url
 """
 urlpatterns += [
     path('course/', include('courses.urls', namespace='courses')),
+]
+
+"""
+user center url 
+"""
+urlpatterns += [
+    path('users/', include('users.urls', namespace='users')),
 ]
 
 
