@@ -3,11 +3,12 @@ from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponse
 from pure_pagination import Paginator, PageNotAnInteger
-
+from django.db.models import Q
 
 from .models import CourseOrg, CityDict, Teacher
 from operation.models import UserFavorite
 from .forms import UserAskForm
+from utils.mixin_utils import LoginRequiredMixin
 
 
 class OrgListView(View):
@@ -16,8 +17,16 @@ class OrgListView(View):
     """
     def get(self, request):
         # All Organization
-        nav_org = True
         all_orgs = CourseOrg.objects.all()
+
+        # Search Teacher
+        search_keywords = request.GET.get('keywords', "")
+        if search_keywords:
+            all_orgs = all_orgs.filter(Q(name__icontains=search_keywords) |
+                                       Q(desc__icontains=search_keywords) |
+                                       Q(address__icontains=search_keywords) |
+                                       Q(tag__icontains=search_keywords)
+                                       )
 
         # All City
         all_cities = CityDict.objects.all()
@@ -62,7 +71,6 @@ class OrgListView(View):
                                                  "ct": category_code,
                                                  "sort": sort,
                                                  "hot_orgs": hot_orgs,
-                                                 "nav_org": nav_org,
                                                  })
 
 
@@ -86,7 +94,6 @@ class OrgHomeView(View):
     organization home detail
     """
     def get(self, request, company_id):
-        nav_org = True
         home_page = True
 
         the_org = CourseOrg.objects.get(id=int(company_id))
@@ -108,7 +115,6 @@ class OrgHomeView(View):
                        "all_teacher": all_teacher,
                        "company_id": company_id,
                        "home_page": home_page,
-                       "nav_org": nav_org,
                        "has_favorite": has_favorite,
                        })
 
@@ -247,12 +253,18 @@ class TeacherListView(View):
     教师列表页
     """
     def get(self, request):
-        nav_teacher = True
-
         # 全部教师
         # sort students and courses
         sort = request.GET.get('sort', "")
         all_teachers = Teacher.objects.all().order_by('add_time')
+
+        # Search Teacher
+        search_keywords = request.GET.get('keywords', "")
+        if search_keywords:
+            all_teachers = all_teachers.filter(Q(name__icontains=search_keywords) |
+                                               Q(work_company__icontains=search_keywords)
+                                               )
+
         if sort == "hot":
             all_teachers = Teacher.objects.all().order_by('-click_nums')
 
@@ -269,31 +281,30 @@ class TeacherListView(View):
         # 教师排行榜-根据点击数
         top_teachers = Teacher.objects.all().order_by('-click_nums')[:3]
 
-        return render(request, "teachers-list.html", {"nav_teacher": nav_teacher,
-                                                      "all_teachers": p_teachers,
+        return render(request, "teachers-list.html", {"all_teachers": p_teachers,
                                                       "all_teachers_nums": all_teachers_nums,
                                                       "top_teachers": top_teachers,
                                                       "sort": sort,
                                                       })
 
 
-class TeacherDetailView(View):
+class TeacherDetailView(LoginRequiredMixin, View):
     """
     教师详情页
     """
     def get(self, request, teacher_id):
-        nav_teacher = True
-
         # 教师排行
         top_teachers = Teacher.objects.all().order_by('-click_nums')[:3]
 
         # 取得教师的资料
         teacher = Teacher.objects.get(id=teacher_id)
 
-        # 取得教师的课程
+        # 判断是否已经收藏
+        has_fav_teacher = UserFavorite.objects.filter(user=request.user, fav_id=int(teacher_id), fav_type=3)
+        has_fav_org = UserFavorite.objects.filter(user=request.user, fav_id=teacher.org.id, fav_type=2)
 
-        return render(request, "teacher-detail.html", {"nav_teacher": nav_teacher,
-                                                       "top_teachers": top_teachers,
+        return render(request, "teacher-detail.html", {"top_teachers": top_teachers,
                                                        "teacher": teacher,
-
+                                                       "has_fav_teacher": has_fav_teacher,
+                                                       "has_fav_org": has_fav_org,
                                                        })

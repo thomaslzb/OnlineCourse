@@ -8,6 +8,7 @@ from django.conf import settings
 
 from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, PasswordResetView, ModifyPwdView
 from organization.views import TeacherListView
+from views import IndexView
 
 # xadmin.autodiscover()
 #
@@ -24,7 +25,7 @@ urlpatterns = [
 
 # index
 urlpatterns += [
-    path('', TemplateView.as_view(template_name="index.html"), name="index"),
+    path('', IndexView.as_view(), name="index"),
 ]
 
 """
@@ -52,13 +53,6 @@ Course url
 """
 urlpatterns += [
     path('course/', include('courses.urls', namespace='courses')),
-]
-
-"""
-Teachers url
-"""
-urlpatterns += [
-    path('teacher/list/', TeacherListView.as_view(), name="teacher_list"),
 ]
 
 

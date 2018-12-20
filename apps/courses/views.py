@@ -14,9 +14,15 @@ class CourseListView(View):
     课程的列表页面
     """
     def get(self, request):
-        nav_course = True
-
         all_courses = Course.objects.all().order_by("-add_time")
+
+        # Search Course
+        search_keywords = request.GET.get('keywords', "")
+        if search_keywords:
+            all_courses = all_courses.filter(Q(name__icontains=search_keywords) |
+                                             Q(detail__icontains=search_keywords) |
+                                             Q(desc__icontains=search_keywords)
+                                             )
 
         sort = request.GET.get('sort', "")
         if sort:
@@ -36,8 +42,7 @@ class CourseListView(View):
         p = Paginator(all_courses, 9, request=request)
         p_courses = p.page(page)
 
-        return render(request, "course-list.html", {"nav_course": nav_course,
-                                                    "all_courses": p_courses,
+        return render(request, "course-list.html", {"all_courses": p_courses,
                                                     "hot_courses": hot_courses,
                                                     "sort": sort,
                                                     })
@@ -48,7 +53,6 @@ class CourseDetailView(LoginRequiredMixin, View):
     课程的详情页面
     """
     def get(self, request, course_id):
-        nav_course = True
         course_detail = Course.objects.get(id=int(course_id))
 
         # 保存用户的课程点击数
@@ -59,8 +63,7 @@ class CourseDetailView(LoginRequiredMixin, View):
             """
             无此课程
             """
-            return render(request, "course-list.html", {"nav_course": nav_course,
-                                                        })
+            return render(request, "course-list.html", {})
         # 判断用户是否收藏此课程
         has_fav_course = False
         has_fav_org = False
@@ -77,8 +80,7 @@ class CourseDetailView(LoginRequiredMixin, View):
         else:
             relate_courses = []
 
-        return render(request, "course-detail.html", {"nav_course": nav_course,
-                                                      "course_detail": course_detail,
+        return render(request, "course-detail.html", {"course_detail": course_detail,
                                                       "has_fav_course": has_fav_course,
                                                       "has_fav_org": has_fav_org,
                                                       "relate_courses": relate_courses,
@@ -90,7 +92,6 @@ class CourseInfoView(LoginRequiredMixin, View):
     课程详情的章节及资源的下载
     """
     def get(self, request, course_id):
-        nav_course = True
         course_detail = Course.objects.get(id=int(course_id))
 
         # 保存用户开始学习此课程的信息
@@ -114,7 +115,6 @@ class CourseInfoView(LoginRequiredMixin, View):
         course_rescourses = CourseResource.objects.filter(course=course_detail)
 
         return render(request, "course-video.html", {"course_detail": course_detail,
-                                                     "nav_course": nav_course,
                                                      "course_rescourses": course_rescourses,
                                                      "relate_coursers": relate_coursers,
                                                      })
@@ -125,7 +125,6 @@ class CourseCommentView(LoginRequiredMixin, View):
     课程详情的课程评论
     """
     def get(self, request, course_id):
-        nav_course = True
         course_detail = Course.objects.get(id=int(course_id))
 
         course_comments = CourseComments.objects.filter(course=course_detail).order_by('-add_time')
@@ -160,7 +159,6 @@ class CourseCommentView(LoginRequiredMixin, View):
         course_rescourses = CourseResource.objects.filter(course=course_detail)
 
         return render(request, "course-comment.html", {"course_detail": course_detail,
-                                                       "nav_course": nav_course,
                                                        "course_rescourses": course_rescourses,
                                                        "relate_coursers": relate_coursers,
                                                        "course_comments": p_comments,

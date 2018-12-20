@@ -66,13 +66,15 @@ function search_click(){
     if(keywords == ""){
         return
     }
+    alert()
     if(type == "course"){
-        request_url = "/course/list?keywords="+keywords
+        request_url = "{% url 'course:list' %}?keywords="+keywords
     }else if(type == "teacher"){
-        request_url = "/org/teacher/list?keywords="+keywords
+        request_url = "{% url 'org:teacher_list' %}?keywords="+keywords
     }else if(type == "org"){
-        request_url = "/org/list?keywords="+keywords
+        request_url = "{% url'org:list' %}?keywords="+keywords
     }
+    alert(request_url)
     window.location.href = request_url
 }
 
