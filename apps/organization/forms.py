@@ -16,7 +16,6 @@ class UserAskForm(forms.ModelForm):
     def clean_mobile(self):
         """
         check mobile is valid
-        :return:
         """
         mobile = self.cleaned_data['mobile']
         phone_pat = re.compile('^(13\d|14[5|7]|15\d|166|17[3|6|7]|18\d)\d{8}$')

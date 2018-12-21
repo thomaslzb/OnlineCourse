@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
-
+import json
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.hashers import make_password
 from django.db.models import Q
 from django.views.generic.base import View
-
+from django.http import HttpResponse
 
 from .models import UserProfile, EmailVerifyRecord
-from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm
+from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, ModifyUserInfoForm
+from .forms import UploadAvatarForm
 from utils.email_send import send_register_email
 from utils.mixin_utils import LoginRequiredMixin
 
@@ -110,6 +111,9 @@ class ForgetPwdView(View):
 
 
 class PasswordResetView(View):
+    """
+    Password Reset
+    """
     def get(self, request, active_code):
         all_record = EmailVerifyRecord.objects.filter(code=active_code)
         if all_record:
@@ -121,6 +125,9 @@ class PasswordResetView(View):
 
 
 class ModifyPwdView(View):
+    """
+    Modify user's password
+    """
     def post(self, request):
         modifypwdform = ModifyPwdForm(request.POST)
         email = request.POST.get("email", "")
@@ -129,12 +136,12 @@ class ModifyPwdView(View):
             pass2 = request.POST.get("password2", "")
             if pass1 != pass2:
                 return render(request, "password_reset.html", {"modifypwd_form": modifypwdform,
-                                                               "email": email,"msg": "两次输入的密码不一致"})
+                                                               "email": email, "msg": "两次输入的密码不一致"})
 
-            userprofile = UserProfile.objects.get(email=email)
-            if userprofile:
-                userprofile.password = make_password(pass1)
-                userprofile.save()
+            user_profile = UserProfile.objects.get(email=email)
+            if user_profile:
+                user_profile.password = make_password(pass1)
+                user_profile.save()
                 return render(request, "modifypwd_success.html")
         else:
             return render(request, "password_reset.html", {"modifypwd_form": modifypwdform, "email": email})
@@ -146,6 +153,27 @@ class UserInfoView(LoginRequiredMixin, View):
     """
     def get(self, request):
         return render(request, 'usercenter-info.html', {})
+
+    def post(self, request):
+        """
+        user modify information
+        """
+        user_form = ModifyUserInfoForm(request.POST, instance=request.user)
+
+        if user_form.is_valid():
+            user_form.save()
+            return HttpResponse('{"status": "success", "msg": "个人信息修改成功" }', content_type='application/json')
+        return HttpResponse(json.dumps(user_form.errors), content_type='application/json')
+
+
+class UploadAvatarView(LoginRequiredMixin, View):
+    def post(self, request):
+        upload_avatar = UploadAvatarForm(request.POST, request.FILES, instance=request.user)
+        if upload_avatar:
+            upload_avatar.save()
+            return HttpResponse('{"status": "success", "msg": "用户头像修改成功" }', content_type='application/json')
+        else:
+            return HttpResponse('{"status": "success", "msg": "用户头像修改失败" }', content_type='application/json')
 
 
 class UserMyCourseView(LoginRequiredMixin, View):
