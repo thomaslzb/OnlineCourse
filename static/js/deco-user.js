@@ -82,13 +82,18 @@ $(function(){
     });
 
     $('#jsResetPwdBtn').click(function(){
+        var _self = $(this);
         $.ajax({
             cache: false,
             type: "POST",
             dataType:'json',
-            url:"/users/update/pwd/",
+            url:"/users/update/password/",
             data:$('#jsResetPwdForm').serialize(),
             async: true,
+            beforeSend:function(XMLHttpRequest){
+                _self.val("提交中...");
+                _self.attr('disabled',true);
+            },
             success: function(data) {
                 if(data.password1){
                     Dml.fun.showValidateError($("#pwd"), data.password1);
@@ -99,6 +104,7 @@ $(function(){
                         title:'提交成功',
                         h2:'修改密码成功，请重新登录!',
                     });
+                    setTimeout(function(){window.location.href = window.location.href;},1500);
                     Dml.fun.winReload();
                 }else if(data.msg){
                     Dml.fun.showValidateError($("#pwd"), data.msg);
@@ -172,6 +178,8 @@ $(function(){
                     _showValidateError($('#nick_name'), data.nick_name);
                 }else if(data.birthday){
                    _showValidateError($('#birth_day'), data.birthday);
+                }else if(data.mobile){
+                   _showValidateError($('#mobile'), data.mobile);
                 }else if(data.address){
                    _showValidateError($('#address'), data.address);
                 }else if(data.status == "failure"){

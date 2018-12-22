@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="78b0a216-807d-4e4d-97fb-1ac92a63a0a7" name="Default" comment="ver 12.10">
-      <change beforePath="$PROJECT_DIR$/apps/organization/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/organization/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/users/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/users/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/users/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/users/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/users/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/js/deco-user.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/deco-user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/org_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/org_base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/usercenter-base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/usercenter-base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/usercenter-info.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/usercenter-info.html" afterDir="false" />
     </list>
@@ -68,13 +65,14 @@
     <session id="447091452">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="29" />
+          <entry key="project.closed" value="30" />
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.16" value="1" />
           <entry key="project.open.time.18" value="2" />
           <entry key="project.open.time.19" value="5" />
           <entry key="project.open.time.20" value="8" />
           <entry key="project.open.time.21" value="5" />
+          <entry key="project.open.time.23" value="1" />
           <entry key="project.open.time.24" value="3" />
           <entry key="project.open.time.26" value="1" />
           <entry key="project.open.time.29" value="1" />
@@ -83,7 +81,7 @@
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="32" />
+          <entry key="project.opened" value="33" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -94,21 +92,21 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CSS" value="2" />
-          <entry key="Database Element" value="33" />
-          <entry key="HTML" value="144" />
+          <entry key="Database Element" value="35" />
+          <entry key="HTML" value="147" />
           <entry key="JavaScript" value="9" />
           <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Python" value="202" />
+          <entry key="Python" value="206" />
           <entry key="Scratch" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CommandLine" value="87" />
-          <entry key="HTML" value="7761" />
-          <entry key="JavaScript" value="289" />
+          <entry key="HTML" value="7844" />
+          <entry key="JavaScript" value="303" />
           <entry key="PLAIN_TEXT" value="30" />
-          <entry key="Python" value="10746" />
+          <entry key="Python" value="11740" />
           <entry key="Scratch" value="139" />
         </counts>
       </usages-collector>
@@ -116,11 +114,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/static/js/deco-user.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="494">
-              <caret line="113" column="8" lean-forward="true" selection-start-line="113" selection-start-column="8" selection-end-line="113" selection-end-column="8" />
+            <state relative-caret-position="676">
+              <caret line="107" column="40" lean-forward="true" selection-start-line="107" selection-start-column="40" selection-end-line="107" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -128,8 +126,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/apps/users/forms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="747">
-              <caret line="51" column="22" selection-start-line="51" selection-start-column="6" selection-end-line="51" selection-end-column="22" />
+            <state relative-caret-position="201">
+              <caret line="33" selection-start-line="33" selection-end-line="33" />
               <folding>
                 <element signature="e#42#51#0" expanded="true" />
               </folding>
@@ -137,13 +135,58 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apps/users/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-266">
+              <caret line="10" column="6" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+              <folding>
+                <element signature="e#26#65#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/apps/users/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="157" column="11" lean-forward="true" selection-start-line="157" selection-start-column="11" selection-end-line="157" selection-end-column="11" />
+            <state relative-caret-position="220">
+              <caret line="190" column="27" lean-forward="true" selection-start-line="190" selection-start-column="27" selection-end-line="190" selection-end-column="27" />
               <folding>
                 <element signature="e#24#35#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apps/users/urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="247">
+              <caret line="19" column="10" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="26" />
+              <folding>
+                <element signature="e#24#52#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/usercenter-base.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="190">
+              <caret line="140" column="58" selection-start-line="140" selection-start-column="58" selection-end-line="140" selection-end-column="58" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/usercenter-info.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="104">
+              <caret line="77" column="47" selection-start-line="77" selection-start-column="47" selection-end-line="77" selection-end-column="47" />
+              <folding>
+                <element signature="n#block#1;n#!!top" />
               </folding>
             </state>
           </provider>
@@ -161,7 +204,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>AddCommentView</find>
       <find>course_comment</find>
       <find>js-pl-submit</find>
       <find>post</find>
@@ -191,6 +233,7 @@
       <find>头像</find>
       <find>jsAvatarForm</find>
       <find>选择文件错误</find>
+      <find>jsResetPwdBtn</find>
     </findStrings>
     <replaceStrings>
       <replace>js/</replace>
@@ -259,12 +302,12 @@
         <option value="$PROJECT_DIR$/apps/organization/forms.py" />
         <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/templates/org_base.html" />
-        <option value="$PROJECT_DIR$/templates/usercenter-base.html" />
-        <option value="$PROJECT_DIR$/static/js/deco-user.js" />
-        <option value="$PROJECT_DIR$/apps/users/forms.py" />
-        <option value="$PROJECT_DIR$/templates/usercenter-info.html" />
         <option value="$PROJECT_DIR$/apps/users/urls.py" />
+        <option value="$PROJECT_DIR$/apps/users/forms.py" />
         <option value="$PROJECT_DIR$/apps/users/views.py" />
+        <option value="$PROJECT_DIR$/templates/usercenter-base.html" />
+        <option value="$PROJECT_DIR$/templates/usercenter-info.html" />
+        <option value="$PROJECT_DIR$/static/js/deco-user.js" />
       </list>
     </option>
   </component>
@@ -494,22 +537,21 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21006711" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21275167" />
       <window_info id="Structure" order="1" weight="0.24962178" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4969743" weight="0.22269504" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49798658" weight="0.67234045" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4969743" weight="0.3602837" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49798658" weight="0.4794326" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32765958" />
       <window_info anchor="bottom" id="manage.py@OnlineCourse" order="8" weight="0.47517732" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.37730497" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32765958" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.27092198" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50201344" side_tool="true" weight="0.470922" />
       <window_info anchor="bottom" id="Docker" order="12" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="13" weight="0.32765958" />
@@ -542,6 +584,16 @@
           <url>file://$PROJECT_DIR$/apps/courses/views.py</url>
           <line>19</line>
           <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/apps/users/views.py</url>
+          <line>161</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/apps/users/views.py</url>
+          <line>181</line>
+          <option name="timeStamp" value="28" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -733,16 +785,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/OnlineCourse/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="56" column="15" selection-start-line="56" selection-start-column="15" selection-end-line="56" selection-end-column="15" />
-          <folding>
-            <element signature="e#24#37#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../Venv/onlinecourse/Lib/site-packages/django/db/models/query.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="155">
@@ -787,20 +829,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://a3a54dce-224a-44c1-9227-2ba0679c9aad/schema/main/table/users_userprofile">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/usercenter-base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="836">
-          <caret line="44" column="90" selection-start-line="44" selection-start-column="90" selection-end-line="44" selection-end-column="90" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/password_reset.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76">
@@ -814,36 +842,6 @@
           <caret line="18" selection-start-line="18" selection-end-line="18" />
           <folding>
             <element signature="e#25#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apps/users/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-412">
-          <caret line="11" column="46" selection-start-line="11" selection-start-column="44" selection-end-line="11" selection-end-column="46" />
-          <folding>
-            <element signature="e#26#65#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/usercenter-info.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="32" column="91" lean-forward="true" selection-start-line="32" selection-start-column="91" selection-end-line="32" selection-end-column="93" />
-          <folding>
-            <element signature="n#block#1;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apps/users/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="17" column="71" lean-forward="true" selection-start-line="17" selection-start-column="71" selection-end-line="17" selection-end-column="71" />
-          <folding>
-            <element signature="e#24#52#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -890,13 +888,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../Venv/onlinecourse/Lib/site-packages/django/views/generic/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="67" selection-start-line="67" selection-end-line="67" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../Venv/onlinecourse/Lib/site-packages/django/contrib/auth/decorators.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
@@ -904,17 +895,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/js/deco-user.js">
+    <entry file="file://$PROJECT_DIR$/OnlineCourse/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="113" column="8" lean-forward="true" selection-start-line="113" selection-start-column="8" selection-end-line="113" selection-end-column="8" />
+        <state relative-caret-position="133">
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Venv/onlinecourse/Lib/site-packages/django/views/generic/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="87" selection-start-line="87" selection-end-line="87" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://a3a54dce-224a-44c1-9227-2ba0679c9aad/schema/main/table/users_userprofile">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/users/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-266">
+          <caret line="10" column="6" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+          <folding>
+            <element signature="e#26#65#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/apps/users/forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="747">
-          <caret line="51" column="22" selection-start-line="51" selection-start-column="6" selection-end-line="51" selection-end-column="22" />
+        <state relative-caret-position="201">
+          <caret line="33" selection-start-line="33" selection-end-line="33" />
           <folding>
             <element signature="e#42#51#0" expanded="true" />
           </folding>
@@ -923,11 +938,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/apps/users/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="157" column="11" lean-forward="true" selection-start-line="157" selection-start-column="11" selection-end-line="157" selection-end-column="11" />
+        <state relative-caret-position="220">
+          <caret line="190" column="27" lean-forward="true" selection-start-line="190" selection-start-column="27" selection-end-line="190" selection-end-column="27" />
           <folding>
             <element signature="e#24#35#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/users/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="19" column="10" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="26" />
+          <folding>
+            <element signature="e#24#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/usercenter-base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="140" column="58" selection-start-line="140" selection-start-column="58" selection-end-line="140" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/usercenter-info.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="104">
+          <caret line="77" column="47" selection-start-line="77" selection-start-column="47" selection-end-line="77" selection-end-column="47" />
+          <folding>
+            <element signature="n#block#1;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/deco-user.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="676">
+          <caret line="107" column="40" lean-forward="true" selection-start-line="107" selection-start-column="40" selection-end-line="107" selection-end-column="40" />
         </state>
       </provider>
     </entry>

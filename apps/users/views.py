@@ -159,7 +159,6 @@ class UserInfoView(LoginRequiredMixin, View):
         user modify information
         """
         user_form = ModifyUserInfoForm(request.POST, instance=request.user)
-
         if user_form.is_valid():
             user_form.save()
             return HttpResponse('{"status": "success", "msg": "个人信息修改成功" }', content_type='application/json')
@@ -167,13 +166,32 @@ class UserInfoView(LoginRequiredMixin, View):
 
 
 class UploadAvatarView(LoginRequiredMixin, View):
+    # User update Avatar
     def post(self, request):
         upload_avatar = UploadAvatarForm(request.POST, request.FILES, instance=request.user)
         if upload_avatar:
             upload_avatar.save()
             return HttpResponse('{"status": "success", "msg": "用户头像修改成功" }', content_type='application/json')
         else:
-            return HttpResponse('{"status": "success", "msg": "用户头像修改失败" }', content_type='application/json')
+            return HttpResponse('{"status": "fail", "msg": "用户头像修改失败" }', content_type='application/json')
+
+
+class UpdateUserPasswordView(LoginRequiredMixin, View):
+    # User update password
+    def post(self, request):
+        modify_form = ModifyPwdForm(request.POST)
+        if modify_form.is_valid():
+            pass1 = request.POST.get("password1", "")
+            pass2 = request.POST.get("password2", "")
+            if pass1 != pass2:
+                return HttpResponse('{"status": "fail", "msg": "两次输入的密码不一致" }', content_type='application/json')
+            else:
+                user = request.user
+                user.password = make_password(pass1)
+                user.save()
+                return HttpResponse('{"status": "success", "msg": "用户密码更新成功" }', content_type='application/json')
+        else:
+            return HttpResponse(json.dumps(modify_form.errors), content_type='application/json')
 
 
 class UserMyCourseView(LoginRequiredMixin, View):

@@ -2,6 +2,7 @@
 #-*-coding:utf-8-*-
 
 import re
+import datetime
 from django import forms
 from captcha.fields import CaptchaField
 
@@ -47,6 +48,16 @@ class ModifyUserInfoForm(forms.ModelForm):
             return mobile
         else:
             raise forms.ValidationError(u"手机号码不合法", code="mobile_invalid")
+
+    def clean_birthday(self):
+        # check birthday is valid
+        birthday = self.cleaned_data['birthday']
+        today = datetime.date.today()
+        delta = today - birthday
+        if delta.days/365 >= 16:
+            return birthday
+        else:
+            raise forms.ValidationError(u"用户的年龄必须大于16岁", code="birthday_invalid")
 
 
 class UploadAvatarForm(forms.ModelForm):
