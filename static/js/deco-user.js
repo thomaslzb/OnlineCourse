@@ -12,7 +12,7 @@ function sendCodeChangeEmail($btn){
         cache: false,
         type: "get",
         dataType:'json',
-        url:"/users/sendemail_code/",
+        url:"/users/send_email/verify/",
         data:$('#jsChangeEmailForm').serialize(),
         async: true,
         beforeSend:function(XMLHttpRequest){
@@ -50,7 +50,7 @@ var verify = verifyDialogSubmit(
         cache: false,
         type: 'post',
         dataType:'json',
-        url:"/users/update_email/ ",
+        url:"/users/update/email/",
         data:$('#jsChangeEmailForm').serialize(),
         async: true,
         beforeSend:function(XMLHttpRequest){
@@ -63,10 +63,17 @@ var verify = verifyDialogSubmit(
                 Dml.fun.showValidateError($('#jsChangeEmail'), data.email);
             }else if(data.status == "success"){
                 Dml.fun.showErrorTips($('#jsChangePhoneTips'), "邮箱信息更新成功");
-                setTimeout(function(){location.reload();},1000);
+                Dml.fun.showTipsDialog({
+                    title: '保存成功',
+                    h2: '邮箱信息更新成功！'
+                });
+                setTimeout(function(){location.reload();},1500);
             }else{
                  Dml.fun.showValidateError($('#jsChangeEmail'), "邮箱信息更新失败");
             }
+        },
+        error: function(data) {
+            console.log(data.status);
         },
         complete: function(XMLHttpRequest){
             $btn.val("完成");

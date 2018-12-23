@@ -2,7 +2,7 @@
 from django.urls import path
 
 from .views import UserInfoView, UserMyCourseView, UserMessageView, UserMyFavoriteView, UploadAvatarView
-from .views import UpdateUserPasswordView
+from .views import UpdateUserPasswordView, SendVerifyCodeView, UpdateEmailView
 
 """
 users url
@@ -19,7 +19,15 @@ urlpatterns = [
     # user update password
     path('update/password/', UpdateUserPasswordView.as_view(), name="update_password"),
 
+    # user update email
+    path('send_email/verify/', SendVerifyCodeView.as_view(), name="send_mail_for_verify"),
+    path('update/email/', UpdateEmailView.as_view(), name="update_mail"),
+
+    # My favorite courses
     path('my-courses/', UserMyCourseView.as_view(), name="my_courses"),
-    path('my-favorites/', UserMyFavoriteView.as_view(), name="my_favorites"),
+
+    # My favorite org
+    path('my-favorites/<fav_item>/', UserMyFavoriteView.as_view(), name="my_favorites"),
+
     path('my-messages/', UserMessageView.as_view(), name="my_Messages"),
 ]

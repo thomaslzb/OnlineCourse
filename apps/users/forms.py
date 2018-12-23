@@ -6,7 +6,7 @@ import datetime
 from django import forms
 from captcha.fields import CaptchaField
 
-from .models import UserProfile
+from .models import UserProfile, EmailVerifyRecord
 
 
 class LoginForm(forms.Form):
@@ -58,6 +58,19 @@ class ModifyUserInfoForm(forms.ModelForm):
             return birthday
         else:
             raise forms.ValidationError(u"用户的年龄必须大于16岁", code="birthday_invalid")
+
+
+class UpdateEmailForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+
+        fields = ['email']
+
+
+class EmailVerifyCodeForm(forms.ModelForm):
+    class Meta:
+        model = EmailVerifyRecord
+        fields = '__all__'
 
 
 class UploadAvatarForm(forms.ModelForm):

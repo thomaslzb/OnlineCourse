@@ -9,8 +9,10 @@ from django.views.generic.base import View
 from django.http import HttpResponse
 
 from .models import UserProfile, EmailVerifyRecord
+from operation.models import UserCourse, UserFavorite
+from organization.models import CourseOrg
 from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, ModifyUserInfoForm
-from .forms import UploadAvatarForm
+from .forms import UploadAvatarForm, UpdateEmailForm, EmailVerifyCodeForm
 from utils.email_send import send_register_email
 from utils.mixin_utils import LoginRequiredMixin
 
@@ -194,20 +196,66 @@ class UpdateUserPasswordView(LoginRequiredMixin, View):
             return HttpResponse(json.dumps(modify_form.errors), content_type='application/json')
 
 
+class SendVerifyCodeView(LoginRequiredMixin, View):
+    # send a email for verification code
+    def get(self, request):
+        email = request.GET.get('email', '')
+        if send_register_email(email, "update_email"):
+            return HttpResponse('{"status": "success"', content_type='application/json')
+        else:
+            return HttpResponse('{"status": "failure"', content_type='application/json')
+
+
+class UpdateEmailView(LoginRequiredMixin, View):
+    # User update email
+    def post(self, request):
+        verify_code = request.POST.get('code', '')
+        email = request.POST.get('email', '')
+        if verify_code != "" and email != "":
+            user_form = UpdateEmailForm(request.POST, instance=request.user)
+            # check verify code is valid
+            email_record = EmailVerifyRecord.objects.get(code=verify_code, email=email, send_type="update_email")
+            if email_record:
+                user_form.save()
+                return HttpResponse('{"status": "success"}', content_type='application/json')
+            else:
+                return HttpResponse('{"status": "failure"}', content_type='application/json')
+        else:
+            return HttpResponse(json.dumps(UpdateEmailForm.errors), content_type='application/json')
+
+
 class UserMyCourseView(LoginRequiredMixin, View):
     """
     Users Courses
     """
     def get(self, request):
-        return render(request, 'usercenter-mycourse.html', {})
+        my_courses = UserCourse.objects.filter(user=request.user)
+        return render(request, 'usercenter-mycourse.html', {"my_courses": my_courses})
 
 
 class UserMyFavoriteView(LoginRequiredMixin, View):
     """
     Users Favorites
     """
-    def get(self, request):
-        return render(request, 'usercenter-fav-org.html', {})
+    def get(self, request, fav_item):
+        if fav_item == "teachers":
+            user_fav = UserFavorite.objects.filter(user=request.user, fav_type=3)
+            return render(request, 'usercenter-fav-teacher.html', {"fav_item": fav_item,
+                                                                   "user_fave": user_fav,
+                                                                   })
+        elif fav_item == "courses":
+            user_fav = UserFavorite.objects.filter(user=request.user, fav_type=1)
+            return render(request, 'usercenter-fav-course.html', {"fav_item": fav_item,
+                                                                  "user_fave": user_fav,
+                                                                  })
+        else:
+            user_fav_orgs = UserFavorite.objects.filter(user=request.user, fav_type=2)
+            user_org_ids = [UserFavorite.fav_id for user_org in user_fav_orgs]
+            user_fav = CourseOrg.objects.filter(city_id__in=user_fav_orgs)
+
+            return render(request, 'usercenter-fav-org.html', {"fav_item": fav_item,
+                                                               "user_fav": user_fav,
+                                                               })
 
 
 class UserMessageView(LoginRequiredMixin, View):
