@@ -7,6 +7,7 @@ from django.db.models import Q
 
 from .models import CourseOrg, CityDict, Teacher
 from operation.models import UserFavorite
+from courses.models import Course
 from .forms import UserAskForm
 from utils.mixin_utils import LoginRequiredMixin
 
@@ -97,6 +98,10 @@ class OrgHomeView(View):
         home_page = True
 
         the_org = CourseOrg.objects.get(id=int(company_id))
+
+        # 保存点击数
+        the_org.click_nums += 1
+        the_org.save()
 
         if not the_org:
             return render(request, 'index.html', {})
@@ -217,7 +222,7 @@ class OrgDetailDescView(View):
 
 class AddFavoriteView(View):
     """
-    User add favorite or cancel favorate
+    User add favorite or cancel favorite
     """
     def post(self, request):
         fav_id = request.POST.get("fav_id", 0)
@@ -237,7 +242,29 @@ class AddFavoriteView(View):
             """
             cancel user favorite
             """
+
             exist_record.delete()
+
+            # decrease favorite num
+            if int(fav_type) == 1:
+                course = Course.objects.get(id=int(fav_id))
+                course.fav_nums -= 1
+                if course.fav_nums < 0:
+                    course.fav_nums = 0
+                course.save()
+            elif int(fav_type) == 2:
+                org = CourseOrg.objects.get(id=int(fav_id))
+                org.fav_nums -= 1
+                if org.fav_nums < 0:
+                    org.fav_nums = 0
+                org.save()
+            elif int(fav_type) == 3:
+                teacher = Teacher.objects.get(id=int(fav_id))
+                teacher.fav_nums -= 1
+                if teacher.fav_nums < 0:
+                    teacher.fav_nums = 0
+                teacher.save()
+
             return HttpResponse('{"status": "success", "msg": "收藏" }', content_type='application/json')
         else:
             user_favorite = UserFavorite()
@@ -245,7 +272,26 @@ class AddFavoriteView(View):
             user_favorite.fav_id = int(fav_id)
             user_favorite.fav_type = int(fav_type)
             user_favorite.save()
+
+            # increase favorite num
+            if int(fav_type) == 1:
+                course = Course.objects.get(id=int(fav_id))
+                course.fav_nums += 1
+                course.save()
+            elif int(fav_type) == 2:
+                org = CourseOrg.objects.get(id=int(fav_id))
+                org.fav_nums += 1
+                org.save()
+            elif int(fav_type) == 3:
+                teacher = Teacher.objects.get(id=int(fav_id))
+                teacher.fav_nums += 1
+                teacher.save()
+
             return HttpResponse('{"status": "success", "msg": "已收藏" }', content_type='application/json')
+
+    def modify_favorite_num(self, *args):
+
+        pass
 
 
 class TeacherListView(View):
@@ -298,6 +344,10 @@ class TeacherDetailView(LoginRequiredMixin, View):
 
         # 取得教师的资料
         teacher = Teacher.objects.get(id=teacher_id)
+
+        # 保存点击数
+        teacher.click_nums += 1
+        teacher.save()
 
         # 判断是否已经收藏
         has_fav_teacher = UserFavorite.objects.filter(user=request.user, fav_id=int(teacher_id), fav_type=3)

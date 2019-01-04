@@ -29,5 +29,6 @@ urlpatterns = [
     # My favorite org
     path('my-favorites/<fav_item>/', UserMyFavoriteView.as_view(), name="my_favorites"),
 
-    path('my-messages/', UserMessageView.as_view(), name="my_Messages"),
+    # My Messages
+    path('my-messages/', UserMessageView.as_view(), name="my_messages"),
 ]

@@ -43,12 +43,12 @@
                                 </dl>
                                 <div class="btn">
 	                                <a class="personcenter fl" href="{% url 'users:my_info' %}">进入个人中心</a>
-	                                <a class="fr" href="/logout/">退出</a>
+	                                <a class="fr" href="{% url 'logout' %}">退出</a>
                                 </div>
                             </div>
                         </div>
-                        <a href="usercenter-message.html">
-                            <div class="msg-num"><span id="MsgNum">0</span></div>
+                        <a href="{% url 'users:my_messages' %}">
+                            <div class="msg-num"><span id="MsgNum">{{ request.user.get_unread_message }}</span></div>
                         </a>
                     
                     
@@ -83,7 +83,7 @@
                     <a href="{% url 'users:my_favorites' 'orgs' %}">我的收藏</a>
                 </li>
                 <li {% if request.path|slice:"18" == "/users/my-messages" %}class="active2"{% endif %}>
-                    <a href="{% url 'users:my_Messages' %}" style="position: relative;">
+                    <a href="{% url 'users:my_messages' %}" style="position: relative;">
                         我的消息
                     </a>
                 </li>
@@ -245,18 +245,20 @@
 <script src="{% static 'js/deco-user.js' %}"></script>
 
 <script type="text/javascript">
-    $('.jsDeleteFav_course').on('click', function(){
+    $('.jsDeleteFav').on('click', function(){
         var _this = $(this),
             favid = _this.attr('data-favid');
-        alert(favid)
+            favtype = _this.attr('data-favetype');
+
+        {#alert(favtype)#}
         $.ajax({
                 cache: false,
                 type: "POST",
-                url: "/org/add_fav/",
+                url: "{% url 'org:add_favorite' %}",
                 data: {
-                    fav_type: 1,
+                    fav_type: favtype,
                     fav_id: favid,
-                    csrfmiddlewaretoken: '799Y6iPeEDNSGvrTu3noBrO4MBLv6enY'
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
                 async: true,
                 success: function(data) {
@@ -264,47 +266,7 @@
                 }
             });
     });
-
-    $('.jsDeleteFav_teacher').on('click', function(){
-            var _this = $(this),
-                favid = _this.attr('data-favid');
-            $.ajax({
-                    cache: false,
-                    type: "POST",
-                    url: "/org/add_fav/",
-                    data: {
-                        fav_type: 3,
-                        fav_id: favid,
-                        csrfmiddlewaretoken: '799Y6iPeEDNSGvrTu3noBrO4MBLv6enY'
-                    },
-                    async: true,
-                    success: function(data) {
-                        Dml.fun.winReload();
-                    }
-                });
-        });
-
-
-    $('.jsDeleteFav_org').on('click', function(){
-            var _this = $(this),
-                favid = _this.attr('data-favid');
-            $.ajax({
-                    cache: false,
-                    type: "POST",
-                    url: "/org/add_fav/",
-                    data: {
-                        fav_type: 2,
-                        fav_id: favid,
-                        csrfmiddlewaretoken: '799Y6iPeEDNSGvrTu3noBrO4MBLv6enY'
-                    },
-                    async: true,
-                    success: function(data) {
-                        Dml.fun.winReload();
-                    }
-                });
-        });
 </script>
-
 
 <script>
         var shareUrl = '',

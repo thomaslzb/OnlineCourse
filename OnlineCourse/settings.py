@@ -27,7 +27,7 @@ SECRET_KEY = "yi8xr@_yl(kpg_3i!ntwc!!gn&)-qlb1skpvdnr09is%u)1ng@"
 # SECURITY WARNING: don"t run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -136,17 +136,24 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-STATIC_URL = "/static/"
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
-)
+
+if DEBUG:
+    STATIC_URL = "/static/"
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+else:
+    STATIC_URL = "/static/"
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+
+# print('STATICFILES_DIRS= ', STATICFILES_DIRS)
+# # print('STATIC_ROOT =', STATIC_ROOT)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
 
 AUTH_USER_MODEL = "users.UserProfile"
 
-AUTHENTICATION_BACKENDS =(
+AUTHENTICATION_BACKENDS = (
     "users.views.CustomBackend",
 )
 

@@ -100,6 +100,10 @@ class CourseInfoView(LoginRequiredMixin, View):
             user_course = UserCourse(user=request.user, course=course_detail)
             user_course.save()
 
+            # Increase study this course's students number
+            course_detail.students += 1
+            course_detail.save()
+
         # 查询学过该课的同学的课程
         user_courses = UserCourse.objects.filter(course=course_detail)
         user_ids = [user_course.user.id for user_course in user_courses]
@@ -169,7 +173,7 @@ class AddCommentView(LoginRequiredMixin, View):
     """
     增加课程评论
     """
-    def post(self, request, course_id):
+    def post(self, request):
         course_id = request.POST.get("course_id", 0)
         comments = request.POST.get('comments', '')
         if int(course_id) > 0 and comments:

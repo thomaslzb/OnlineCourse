@@ -1,18 +1,24 @@
 # -*- coding: utf-8 -*-
 import json
-from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.hashers import make_password
 from django.db.models import Q
 from django.views.generic.base import View
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+from pure_pagination import Paginator, PageNotAnInteger
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
+from django.shortcuts import render_to_response
 
 from .models import UserProfile, EmailVerifyRecord
-from operation.models import UserCourse, UserFavorite
-from organization.models import CourseOrg
+from operation.models import UserCourse, UserFavorite, UserMessage
+from courses.models import Course
+
+from organization.models import CourseOrg, Teacher
 from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, ModifyUserInfoForm
-from .forms import UploadAvatarForm, UpdateEmailForm, EmailVerifyCodeForm
+from .forms import UploadAvatarForm, UpdateEmailForm
 from utils.email_send import send_register_email
 from utils.mixin_utils import LoginRequiredMixin
 
@@ -27,7 +33,19 @@ class CustomBackend(ModelBackend):
             return None
 
 
+class LogoutView(View):
+    """
+    user logout
+    """
+    def get(self, request):
+        logout(request)
+        return HttpResponseRedirect(reverse('index'))
+
+
 class LoginView(View):
+    """
+    user login
+    """
     def get(self, request):
         return render(request, "login.html", {})
 
@@ -41,7 +59,7 @@ class LoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return render(request, "index.html",{})
+                    return HttpResponseRedirect(reverse('index'))
                 else:
                     return render(request, "login.html", {"msg": "用户未激活!"})
             else:
@@ -51,6 +69,9 @@ class LoginView(View):
 
 
 class RegisterView(View):
+    """
+    user register
+    """
     def get(self, request):
         register_form = RegisterForm()
         return render(request, "register.html", {"register_form":register_form})
@@ -71,6 +92,12 @@ class RegisterView(View):
             user_profile.is_active = False
             user_profile.save()
 
+            user_message = UserMessage()
+            user_message.user = user_profile.id
+            user_message.has_read = False
+            user_message.message = "欢迎注册在线课程网， 希望你能够在网站上找到你需要的课程或老师！"
+            user_message.save()
+
             send_register_email(user_name, "register")
             return render(request, "register_mail_success.html")
         else:
@@ -78,6 +105,9 @@ class RegisterView(View):
 
 
 class ActiveUserView(View):
+    """
+    Active user
+    """
     def get(self, request, active_code):
         all_record = EmailVerifyRecord.objects.filter(code=active_code)
         if all_record:
@@ -93,6 +123,9 @@ class ActiveUserView(View):
 
 
 class ForgetPwdView(View):
+    """
+    Forget password
+    """
     def get(self, request):
         forgetpwd_form = ForgetPwdForm()
         return render(request, "forgetpwd.html", {"forgetPwd_form": forgetpwd_form})
@@ -168,7 +201,9 @@ class UserInfoView(LoginRequiredMixin, View):
 
 
 class UploadAvatarView(LoginRequiredMixin, View):
-    # User update Avatar
+    """
+     User update Avatar
+    """
     def post(self, request):
         upload_avatar = UploadAvatarForm(request.POST, request.FILES, instance=request.user)
         if upload_avatar:
@@ -179,7 +214,9 @@ class UploadAvatarView(LoginRequiredMixin, View):
 
 
 class UpdateUserPasswordView(LoginRequiredMixin, View):
-    # User update password
+    """
+    User update password
+    """
     def post(self, request):
         modify_form = ModifyPwdForm(request.POST)
         if modify_form.is_valid():
@@ -197,7 +234,9 @@ class UpdateUserPasswordView(LoginRequiredMixin, View):
 
 
 class SendVerifyCodeView(LoginRequiredMixin, View):
-    # send a email for verification code
+    """
+    send a email for verification code
+    """
     def get(self, request):
         email = request.GET.get('email', '')
         if send_register_email(email, "update_email"):
@@ -207,7 +246,9 @@ class SendVerifyCodeView(LoginRequiredMixin, View):
 
 
 class UpdateEmailView(LoginRequiredMixin, View):
-    # User update email
+    """
+     User update email
+    """
     def post(self, request):
         verify_code = request.POST.get('code', '')
         email = request.POST.get('email', '')
@@ -239,19 +280,26 @@ class UserMyFavoriteView(LoginRequiredMixin, View):
     """
     def get(self, request, fav_item):
         if fav_item == "teachers":
-            user_fav = UserFavorite.objects.filter(user=request.user, fav_type=3)
+            user_fav_teachers = UserFavorite.objects.filter(user=request.user, fav_type=3)
+            teacher_ids = [fav_teacher.fav_id for fav_teacher in user_fav_teachers]
+
+            user_fav = Teacher.objects.filter(id__in=teacher_ids)
             return render(request, 'usercenter-fav-teacher.html', {"fav_item": fav_item,
-                                                                   "user_fave": user_fav,
+                                                                   "user_fav": user_fav,
                                                                    })
         elif fav_item == "courses":
-            user_fav = UserFavorite.objects.filter(user=request.user, fav_type=1)
+            user_fav_courses = UserFavorite.objects.filter(user=request.user, fav_type=1)
+            user_course_ids = [fav_course.fav_id for fav_course in user_fav_courses]
+
+            user_fav = Course.objects.filter(id__in=user_course_ids)
             return render(request, 'usercenter-fav-course.html', {"fav_item": fav_item,
-                                                                  "user_fave": user_fav,
+                                                                  "user_fav": user_fav,
                                                                   })
         else:
             user_fav_orgs = UserFavorite.objects.filter(user=request.user, fav_type=2)
-            user_org_ids = [UserFavorite.fav_id for user_org in user_fav_orgs]
-            user_fav = CourseOrg.objects.filter(city_id__in=user_fav_orgs)
+            user_org_ids = [user_org.fav_id for user_org in user_fav_orgs]
+
+            user_fav = CourseOrg.objects.filter(id__in=user_org_ids)
 
             return render(request, 'usercenter-fav-org.html', {"fav_item": fav_item,
                                                                "user_fav": user_fav,
@@ -263,4 +311,46 @@ class UserMessageView(LoginRequiredMixin, View):
     Users Message
     """
     def get(self, request):
-        return render(request, 'usercenter-message.html', {})
+        user_messages = UserMessage.objects.filter(user=request.user.id).order_by('-add_time')
+
+        # Clear this user's unread message
+        user_unread_messages = UserMessage.objects.filter(user=request.user.id, has_read=False)
+        for unread_message in user_unread_messages:
+            unread_message.has_read = True
+            unread_message.save()
+
+        # 分页
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(user_messages, 8, request=request)
+        p_messages = p.page(page)
+
+        return render(request, 'usercenter-message.html', {"user_messages": p_messages,
+                                                           })
+
+
+@csrf_exempt
+def page_not_found(request):
+    """
+    handle 400
+    """
+    return render_to_response('404.html')
+
+
+@csrf_exempt
+def server_error(request):
+    """
+    handle 500
+    """
+    return render_to_response('500.html')
+
+
+@csrf_exempt
+def permission_denied(request):
+    """
+    handle 403
+    """
+    return render_to_response('403.html')

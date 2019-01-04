@@ -14,7 +14,7 @@ class UserProfile(AbstractUser):
     gender = models.CharField(max_length=6, choices=(("male", u"男"),("female", "女")), default="female")
     address = models.CharField(max_length=100, default=u"")
     mobile = models.CharField(max_length=11, null=True, blank=True)
-    image = models.ImageField(upload_to="image/%Y/%m",default=u"image/default.png", max_length=100)
+    image = models.ImageField(upload_to="image/%Y/%m", default=u"image/default.png", max_length=100)
 
     class Meta:
         verbose_name = "用户信息"
@@ -22,6 +22,12 @@ class UserProfile(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    def get_unread_message(self):
+        # 获取用户未读的消息
+        from operation.models import UserMessage
+
+        return UserMessage.objects.filter(user=self.id, has_read=False).count()
 
 
 class EmailVerifyRecord(models.Model):
