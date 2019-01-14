@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import xadmin
 from django.urls import include, path
-from django.conf.urls import url
+from django.conf.urls import url, handler400, handler403, handler404, handler500
 
 from django.conf import settings
 from django.conf.urls.static import static, serve
 
 from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, PasswordResetView, ModifyPwdView, LogoutView
-from users.views import page_not_found
+
 from views import IndexView
 
 # xadmin.autodiscover()
@@ -85,6 +85,7 @@ else:
 """
 handle 404, 500, ,403
 """
-# handler400 = page_not_found
-# handler403 = ''
-# handler500 = ''
+handler400 = 'apps.users.views.bad_request'
+handler403 = 'apps.users.views.permission_denied'
+handler404 = 'apps.users.views.page_not_found'
+handler500 = 'apps.users.views.server_error'

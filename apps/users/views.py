@@ -8,17 +8,18 @@ from django.views.generic.base import View
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from pure_pagination import Paginator, PageNotAnInteger
-from django.views.decorators.csrf import csrf_exempt
+from django.template import RequestContext
+
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 
-from .models import UserProfile, EmailVerifyRecord
+from users.models import UserProfile, EmailVerifyRecord
 from operation.models import UserCourse, UserFavorite, UserMessage
 from courses.models import Course
 
 from organization.models import CourseOrg, Teacher
-from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, ModifyUserInfoForm
-from .forms import UploadAvatarForm, UpdateEmailForm
+from users.forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, ModifyUserInfoForm
+from users.forms import UploadAvatarForm, UpdateEmailForm
 from utils.email_send import send_register_email
 from utils.mixin_utils import LoginRequiredMixin
 
@@ -332,25 +333,46 @@ class UserMessageView(LoginRequiredMixin, View):
                                                            })
 
 
-@csrf_exempt
-def page_not_found(request):
+def bad_request(request):
     """
     handle 400
     """
-    return render_to_response('404.html')
+    context = RequestContext(request)
+    err_code = 400
+    response = render_to_response('404.html', {"code": err_code}, context)
+    response.status_code = 400
+    return response
 
 
-@csrf_exempt
+def page_not_found(request):
+    """
+    handle 404
+    """
+    context = RequestContext(request)
+    err_code = 404
+    response = render_to_response('404.html', {"code": err_code}, context)
+    response.status_code = 404
+    return response
+
+
 def server_error(request):
     """
     handle 500
     """
-    return render_to_response('500.html')
+    context = RequestContext(request)
+    err_code = 500
+    response = render_to_response('500.html', {"code": err_code}, context)
+    response.status_code = 500
+    return response
 
 
-@csrf_exempt
 def permission_denied(request):
     """
     handle 403
     """
-    return render_to_response('403.html')
+    context = RequestContext(request)
+    err_code = 403
+    response = render_to_response('403.html', {"code": err_code}, context)
+    response.status_code = 403
+    return response
+
